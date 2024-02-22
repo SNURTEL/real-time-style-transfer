@@ -10,9 +10,18 @@ on:
 jobs:
   build:
     name: Build the project
+    #    runs-on: [ubuntu-latest, windows-latest]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Plz work
+    - name: Configure Project
+      uses: threeal/cmake-action@v1.3.0
+      with:
+        source-dir: src
+        build-dir: build
+        generator: Ninja
+        c-compiler: gcc
+        cxx-compiler: g++
+    - name: Build Project
       run: |
-        echo "Hemlo"
+        cmake --build build
