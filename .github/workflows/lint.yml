@@ -12,7 +12,7 @@ jobs:
     name: Run clang-tidy analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Configure Project
         uses: threeal/cmake-action@v1.3.0
         with:
@@ -36,4 +36,4 @@ jobs:
           sudo apt-get install -y cppcheck
       - name: Run clang-tidy
         run: |
-          cppcheck --enable=all --suppress=missingIncludeSystem --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+          cppcheck --enable=all --suppressions-list=src/.suppressions.txt --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")

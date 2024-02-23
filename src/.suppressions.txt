@@ -1,0 +1,2 @@
+missingIncludeSystem
+unusedFunction:src/test*  # cppcheck will throw false positives on Catch macros
