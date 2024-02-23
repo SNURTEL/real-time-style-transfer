@@ -8,9 +8,8 @@ on:
       - main
 
 jobs:
-  build:
+  clang-tidy:
     name: Run clang-tidy analysis
-#    runs-on: [ubuntu-latest, windows-latest]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,4 +25,15 @@ jobs:
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
       - name: Run clang-tidy
         run: |
-          clang-tidy -p build src/*.cpp
+          clang-tidy -p build $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+  cppcheck:
+    name: Run cppcheck analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install cppcheck
+        run: |
+          sudo apt-get install -y cppcheck
+      - name: Run clang-tidy
+        run: |
+          cppcheck --enable=all --suppress=missingIncludeSystem --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
