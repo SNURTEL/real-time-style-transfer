@@ -13,7 +13,7 @@ jobs:
     #    runs-on: [ubuntu-latest, windows-latest]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Configure Project
       uses: threeal/cmake-action@v1.3.0
       with:
@@ -25,3 +25,14 @@ jobs:
     - name: Build Project
       run: |
         cmake --build build
+
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest
