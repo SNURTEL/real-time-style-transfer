@@ -581,3 +581,10 @@ $RECYCLE.BIN/
 
 build
 .idea
+.ipynb_checkpoints
+MNIST_data
+*.pt
+
+vcpkg.log
+src/vcpkg
+src/vcpkg_installed
