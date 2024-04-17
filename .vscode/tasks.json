@@ -1,0 +1,6 @@
+{
+    "label": "Run dummy",
+    "type": "shell",
+    "command": "./build/main dummy_model.pt 51.png",
+    "version": "2.0.0"
+}
