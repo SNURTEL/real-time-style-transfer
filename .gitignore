@@ -586,5 +586,4 @@ MNIST_data
 *.pt
 
 vcpkg.log
-src/vcpkg
 src/vcpkg_installed

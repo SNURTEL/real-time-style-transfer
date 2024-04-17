@@ -1,6 +1,17 @@
 {
   "dependencies": [
-    "opencv4",
-    "catch2"
+    {
+      "name": "catch2",
+      "version>=": "3.5.4"
+    },
+    {
+      "name": "opencv4",
+      "version>=": "4.8.0#15"
+    },
+    {
+      "name": "libtorch",
+      "version>=": "2.1.2",
+      "features": ["cuda"]
+    }
   ]
 }

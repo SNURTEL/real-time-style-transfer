@@ -6,6 +6,7 @@ Description goes here.
 
 #### Prerequisites
 - `CMake`
+- CUDA
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
 - _(optional)_ `cppcheck`
@@ -16,38 +17,45 @@ Description goes here.
 
 ```shell
 git submodule update --init --update
-export VCPKG_ROOT=${PWD}/vcpkg
+export VCPKG_ROOT=${PWD}/src/vcpkg
 export PATH=$VCPKG_ROOT:$PATH
-./vcpkg/bootstrap-vcpkg.sh -disableMetrics
+./src/vcpkg/bootstrap-vcpkg.sh -disableMetrics
 ```
 
-Then, install `vcpkg` dependencies from manifest file (this WILL take a while!):
+Run `cmake` to configure the build and fetch & build dependencies via `vcpkg`'s manifest mode (this will take a good while!):
 
 ```shell
-vcpkg install | tee -a vcpkg.log
+cmake -S src -B build
 ```
 
 You will most likely get some errors related to missing packages causing dependencies to fail build. Read the logs carefully. Missing packages may include:
 
 ```shell
-# debian-based
+# debian-based distro
 libXtst
 libxtst-dev
 libtool
+pkg-config
+autoconf-archive
+gfortran
+cudnn9-cuda-12  # or cudnn9-cuda-11
 
-# RHEL-based
+
+# RHEL-based distro
 libXtst-devel
 libtool
+pkg-config
+autoconf-archive
+gfortran
 ```
+
+If you're getting CUDA-related errors, you may want to try setting `CUDACXX=/path/to/cuda/nvcc` before the first command. This should be something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`.
 
 Finally, build the actual package:
 
 ```shell
-cmake -S src -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build
 ```
-
-The `DCMAKE_EXPORT_COMPILE_COMMANDS` is only needed by `clang-tidy`. If you're getting CUDA-related errors, you may want to try setting `CUDACXX=/path/to/cuda/nvcc` before the first command. This should be something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`.
 
 #### Run tests
 ```shell
