@@ -1,3 +1,4 @@
+# triggers false negatives
 #find_package(Catch2 REQUIRED)
 
 add_executable(tests test-sanity/test-sanity.cpp)

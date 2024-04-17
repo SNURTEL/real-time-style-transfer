@@ -5,51 +5,27 @@ Description goes here.
 ## Setup
 
 #### Prerequisites
-- `CMake`
+- `cmake`
 - CUDA
+- OpenCV
+- Libtorch
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
 - _(optional)_ `cppcheck`
 
 #### Build
 
-`vcpkg` comes bundled with the project as a git submodule. Install:
-
-```shell
-git submodule update --init --update
-export VCPKG_ROOT=${PWD}/src/vcpkg
-export PATH=$VCPKG_ROOT:$PATH
-./src/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-```
-
-Run `cmake` to configure the build and fetch & build dependencies via `vcpkg`'s manifest mode (this will take a good while!):
+Assuming you have installed all dependencies, run `cmake` to configure the build (this will take a second, since cmake will need to fetch the Catch2 library):
 
 ```shell
 cmake -S src -B build
 ```
 
-You will most likely get some errors related to missing packages causing dependencies to fail build. Read the logs carefully. Missing packages may include:
+If your cmake struggles to find CUDA, Libtorch or OpenCV, you can specify their location by setting the respective env variable:
+- CUDA - `CUDACXX=/path/to/cuda/nvcc` (usually something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`)
+- Libtorch - `Torch_DIR`
+- OpenCV - `OpenCV_DIR`
 
-```shell
-# debian-based distro
-libXtst
-libxtst-dev
-libtool
-pkg-config
-autoconf-archive
-gfortran
-cudnn9-cuda-12  # or cudnn9-cuda-11
-
-
-# RHEL-based distro
-libXtst-devel
-libtool
-pkg-config
-autoconf-archive
-gfortran
-```
-
-If you're getting CUDA-related errors, you may want to try setting `CUDACXX=/path/to/cuda/nvcc` before the first command. This should be something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`.
 
 Finally, build the actual package:
 
@@ -60,6 +36,34 @@ cmake --build build
 #### Run tests
 ```shell
 ctest --test-dir build
+```
+
+
+#### Alternative: using `vcpkg`
+- If you have plenty of time and CPU horsepower and you *really* don't want to clutter up your system with extra libraries, you can try using `vcpkg` to pull and build dependencies from source (this is not recommended and has a good chance of failing). Init `vcpkg` as submodule:
+
+
+```shell
+git submodule update --init --update
+export VCPKG_ROOT=${PWD}/src/vcpkg
+export PATH=$VCPKG_ROOT:$PATH
+./src/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+```
+
+Add a `USE_VCPKG` flag to cmake. Dependencies will be fetched while configuring the project
+
+```shell
+cmake -S src -B build -DUSE_VCPKG
+```
+
+Those libraries may come in handy:
+
+```shell
+# debian-based
+sudo apt install libXtst libxtst-dev libtool pkg-config autoconf-archive gfortran cudnn9-cuda-12  # or cudnn9-cuda-11
+
+# RHEL-based 
+sudo dnf install libXtst-devel libtool pkg-config autoconf-archive gfortran cudnn9-cuda-12  # or cudnn9-cuda-11
 ```
 
 ## Contributing

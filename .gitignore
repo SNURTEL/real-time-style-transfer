@@ -589,3 +589,5 @@ vcpkg.log
 src/vcpkg_installed
 
 saved_image.png
+
+.vscode
