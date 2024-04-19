@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     image = std::make_shared<QLabel>(this);
     text = std::make_shared<QLabel>(this);
-    text->setGeometry(130, 80, 100, 50);
+    text->setGeometry(130, 80, 200, 50);
 
     QPixmap pixmap;
 
@@ -61,7 +61,7 @@ void MainWindow::onRunButtonClicked() {
         return;
     }
 
-    int out_class = modelManager.get()->predict(tensor.value());
+    int out_class = modelManager->predict(tensor.value());
     if (out_class == -1) {
         QMessageBox::warning(this, "[Run]", "Model is not loaded. Restart application");
         return;
