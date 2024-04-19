@@ -66,6 +66,14 @@ sudo apt install libXtst libxtst-dev libtool pkg-config autoconf-archive gfortra
 sudo dnf install libXtst-devel libtool pkg-config autoconf-archive gfortran cudnn9-cuda-12  # or cudnn9-cuda-11
 ```
 
+#### Windows
+1. Download Cuda Toolkit and add path to kit to Path variable
+2. Download Torch and add path to Path variable
+3. Download OpenCV and add path to Path variable
+   - set `OpenCV_DIR` variable with value of downloaded library path
+4. Install QT 6.7.0 with MSVC toolchain to directory `C:/QT`
+   - set `QT_QPA_PLATFORM_PLUGIN_PATH` variable to path to `C:/Qt/6.7.0/<msvc qt toolchain version>/plugins/platforms`
+
 ## Contributing
 
 Before submitting a PR:
