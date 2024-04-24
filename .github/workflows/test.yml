@@ -22,7 +22,7 @@ jobs:
 
     - name: Install pre-built Qt6
       run: |
-        sudo apt-get install -y qt6-base-dev=6.2.4+dfsg-2ubuntu1.1
+        sudo apt-get install -y qt6-base-dev=6.2.4+dfsg-2ubuntu1.1 build-essential libgl1-mesa-dev libxkbcommon-x11-dev
 
       # no CUDA in GitHub Actions!
     # - name: Install CUDA
