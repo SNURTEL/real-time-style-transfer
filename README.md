@@ -5,10 +5,10 @@ Description goes here.
 ## Setup
 
 #### Prerequisites
-- `cmake`
-- CUDA
-- OpenCV
-- Libtorch
+- `cmake` (>= 3.25)
+- CUDA (12.X)
+- OpenCV (4.5.5)
+- Libtorch (6.3.1)
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
 - _(optional)_ `cppcheck`
@@ -40,7 +40,7 @@ ctest --test-dir build
 
 
 #### Alternative: using `vcpkg`
-- If you have plenty of time and CPU horsepower and you *really* don't want to clutter up your system with extra libraries, you can try using `vcpkg` to pull and build dependencies from source (this is not recommended and has a good chance of failing). Init `vcpkg` as submodule:
+- If you have plenty of time and CPU horsepower and you *really* don't want to clutter up your system with extra libraries, you can try using `vcpkg` to pull and build dependencies from source (this is not recommended and has a good chance of failing). Also note that `vcpkg` port versions may differ slightly from requirements.  Init `vcpkg` as submodule:
 
 
 ```shell

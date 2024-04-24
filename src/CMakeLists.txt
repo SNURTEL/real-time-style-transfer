@@ -29,7 +29,9 @@ project(24l_zpr)
 
 
 # [Setup/Package] CudaToolkit
-find_package(CUDAToolkit REQUIRED)
+if (NOT NO_USE_CUDA)
+    find_package(CUDAToolkit REQUIRED)
+endif ()
 
 # [Setup/Package] Torch
 find_package(Torch REQUIRED)

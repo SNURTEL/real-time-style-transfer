@@ -1,16 +1,16 @@
 {
   "dependencies": [
     {
-      "name": "catch2",
-      "version>=": "3.5.4"
-    },
-    {
       "name": "opencv4",
-      "version>=": "4.8.0#15"
+      "version>=": "4.5.5#7"
     },
     {
       "name": "libtorch",
       "version>=": "2.1.2#2"
+    },
+    {
+      "name": "qt",
+      "version>=": "6.3.1#0"
     }
   ]
 }
