@@ -10,6 +10,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install utils
+        run: |
+          sudo apt-get install -y wget unzip
+
+      - name: Install pre-built OpenCV
+        run: |
+          sudo apt-get install -y libopencv-dev=4.5.4+dfsg-9ubuntu4
+
+      - name: Install pre-built Qt6
+        run: |
+          sudo apt-get install -y qt6-base-dev=6.2.4+dfsg-2ubuntu1.1 build-essential libgl1-mesa-dev libxkbcommon-x11-dev
+
+        # no CUDA in GitHub Actions!
+      # - name: Install CUDA
+      #   uses: Jimver/cuda-toolkit@v0.2.15
+      #   with:
+      #     cuda: '12.4.1'
+
+        # apt has outdated version (1.8.1)
+      - name: Install LibTorch
+        run: |
+          wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.2.2%2Bcpu.zip -O torch.zip
+          unzip torch.zip
+          cd libtorch
+          echo "Torch_DIR=$(pwd)" >> $GITHUB_ENV
+          cd ..
+
+      - name: Install extra libraries
+        run: |
+          sudo apt install libfmt-dev
+  
+        # mismatched clang and libstdc++ versions in GA runners
+        # https://github.com/actions/runner-images/discussions/9446
+      - uses: mjp41/workaround8649@c8550b715ccdc17f89c8d5c28d7a48eeff9c94a8
+        with:
+          os: "ubuntu-latest"
+
       - name: Configure Project
         uses: threeal/cmake-action@v1.3.0
         with:
@@ -19,10 +57,15 @@ jobs:
           c-compiler: gcc
           cxx-compiler: g++
           args:
+            -DNO_USE_CUDA=ON
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          build-args:
+            -j10
+
       - name: Run clang-tidy
         run: |
-          clang-tidy -p build $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+          chmod +x utils/lint-clang-tidy.sh
+          ./utils/lint-clang-tidy.sh
   cppcheck:
     name: Run cppcheck analysis
     runs-on: ubuntu-latest
@@ -33,4 +76,5 @@ jobs:
           sudo apt-get install -y cppcheck
       - name: Run clang-tidy
         run: |
-          cppcheck --enable=all --suppressions-list=src/.suppressions.txt --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+          chmod +x utils/lint-cppcheck.sh
+          ./utils/lint-cppcheck.sh
