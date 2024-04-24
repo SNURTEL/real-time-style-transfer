@@ -10,5 +10,5 @@ int main(int argc, char *argv[]) {
     }
 
     StyleApplication app(argc, argv, manager);
-    return StyleApplication::exec();
+    return app.exec();
 }

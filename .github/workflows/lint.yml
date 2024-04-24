@@ -22,7 +22,8 @@ jobs:
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
       - name: Run clang-tidy
         run: |
-          clang-tidy -p build $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+          chmod +x utils/lint-clang-tidy.sh
+          ./utils/lint-clang-tidy.sh
   cppcheck:
     name: Run cppcheck analysis
     runs-on: ubuntu-latest
@@ -33,4 +34,5 @@ jobs:
           sudo apt-get install -y cppcheck
       - name: Run clang-tidy
         run: |
-          cppcheck --enable=all --suppressions-list=src/.suppressions.txt --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+          chmod +x utils/lint-cppckeck.sh
+          ./utils/lint-cppcheck.sh

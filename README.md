@@ -81,17 +81,15 @@ Before submitting a PR:
 1. Reformat the code
 
 ```shell
-clang-format -i -style=file --Werror --verbose $(find src -not -path "src/vcpkg**" -not -path "src/build**" \( -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp" \) )
+./utils/reformat.sh
 ```
 
 2. Lint with `clang-tidy` and `cppcheck`
 ```shell
 # NOTE! Project has to be configured with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
-clang-tidy -p build $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
-```
+./utils/lint-clang-tidy.sh
 
-```shell
-cppcheck --enable=all --suppressions-list=src/.suppressions.txt  --error-exitcode=1 $(find src -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp")
+./utils/lint-cppcheck.sh
 ```
 
 3. Run tests as described above
