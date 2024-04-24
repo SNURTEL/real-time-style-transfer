@@ -41,6 +41,12 @@ jobs:
       - name: Install extra libraries
         run: |
           sudo apt install libfmt-dev
+  
+        # mismatched clang and libstdc++ versions in GA runners
+        # https://github.com/actions/runner-images/discussions/9446
+      - uses: mjp41/workaround8649@c8550b715ccdc17f89c8d5c28d7a48eeff9c94a8
+        with:
+          os: "ubuntu-latest"
 
       - name: Configure Project
         uses: threeal/cmake-action@v1.3.0
@@ -51,10 +57,10 @@ jobs:
           c-compiler: gcc
           cxx-compiler: g++
           args:
-            -DNO_USE_CUDA=TRUE
+            -DNO_USE_CUDA=ON
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
           build-args:
             -j10
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Run clang-tidy
         run: |

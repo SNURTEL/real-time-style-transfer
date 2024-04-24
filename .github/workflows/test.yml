@@ -52,9 +52,9 @@ jobs:
         c-compiler: gcc
         cxx-compiler: g++
         args:
-          -DNO_USE_CUDA=TRUE
+          -DNO_USE_CUDA=ON
         build-args:
-          -j10
+          -j10 -lfmt
 
     - name: Build project
       run: |

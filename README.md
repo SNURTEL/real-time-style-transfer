@@ -8,6 +8,7 @@ Description goes here.
 - `cmake` (>= 3.25)
 - CUDA (12.X)
 - OpenCV (4.5.5)
+   - Depending on your system, `libfmt-dev` / `fmt-devel` may also be needed
 - Libtorch (6.3.1)
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`

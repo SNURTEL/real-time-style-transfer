@@ -31,6 +31,8 @@ project(24l_zpr)
 # [Setup/Package] CudaToolkit
 if (NOT NO_USE_CUDA)
     find_package(CUDAToolkit REQUIRED)
+else ()
+    message("Skipping CUDA check")
 endif ()
 
 # [Setup/Package] Torch
@@ -47,7 +49,16 @@ IF (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.7.0/msvc2019_64")
 ENDIF ()
 find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
-qt_standard_project_setup()
+
+# apt does not have QT 6.3, which introduces `qt_standard_project_setup`
+if (Qt6Core_VERSION VERSION_LESS "6.4")
+    message( "Qt version lower that 6.3; cannot use qt_standard_project_setup" )
+    set(CMAKE_AUTOMOC ON) 
+    set(CMAKE_AUTORCC ON) 
+    set(CMAKE_AUTOUIC ON)
+else ()
+    qt_standard_project_setup()
+endif ()
 
 # [Setup/Tests] Setup tests
 FetchContent_Declare(
@@ -85,7 +96,7 @@ qt_add_executable(app MANUAL_FINALIZATION main.cpp
 )
 target_link_libraries(app PRIVATE model)
 target_link_libraries(app PRIVATE Qt6::Widgets)
-target_link_options(app PUBLIC "-lfmt")
+target_link_libraries(app PUBLIC fmt)
 set_property(TARGET app PROPERTY CXX_STANDARD 20)
 qt_finalize_executable(app)
 
