@@ -1,18 +1,16 @@
-#include <torch/script.h>
-#include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
 #include "manager.hpp"
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <torch/script.h>
 
-ModelManager::ModelManager() {
-
-}
+ModelManager::ModelManager() {}
 
 bool ModelManager::loadModel(std::string filename) {
     try {
-        module = std::make_shared<torch::jit::Module>(std::move(torch::jit::load(filename)));
-    }
-    catch (const c10::Error &e) {
+        module = std::make_shared<torch::jit::Module>(
+            std::move(torch::jit::load(filename)));
+    } catch (const c10::Error &e) {
         return false;
     }
 
@@ -33,7 +31,7 @@ std::optional<at::Tensor> ModelManager::loadImage(std::string filename) {
 int ModelManager::predict(at::Tensor input) {
     input = input.to(torch::kFloat32);
 
-    std::vector <torch::jit::IValue> batch;
+    std::vector<torch::jit::IValue> batch;
     batch.push_back(input);
 
     if (!module) {
@@ -46,5 +44,8 @@ int ModelManager::predict(at::Tensor input) {
 }
 
 torch::Tensor ModelManager::to_tensor(cv::Mat image) {
-    return torch::from_blob(image.data, {image.rows, image.cols, image.channels()}, torch::kByte).unsqueeze(0);
+    return torch::from_blob(image.data,
+                            {image.rows, image.cols, image.channels()},
+                            torch::kByte)
+        .unsqueeze(0);
 }

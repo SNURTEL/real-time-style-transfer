@@ -1,11 +1,11 @@
 #ifndef STYLE_APPLICATION_MODEL_MANAGER_HPP
 #define STYLE_APPLICATION_MODEL_MANAGER_HPP
 
-#include <torch/script.h>
 #include <opencv2/core.hpp>
+#include <torch/script.h>
 
 class ModelManager {
-public:
+  public:
     explicit ModelManager();
 
     bool loadModel(std::string filename);
@@ -14,11 +14,10 @@ public:
 
     static std::optional<at::Tensor> loadImage(std::string filename);
 
-private:
+  private:
     static torch::Tensor to_tensor(cv::Mat image);
 
     std::shared_ptr<torch::jit::Module> module;
 };
 
-
-#endif //STYLE_APPLICATION_MODEL_MANAGER_HPP
+#endif // STYLE_APPLICATION_MODEL_MANAGER_HPP

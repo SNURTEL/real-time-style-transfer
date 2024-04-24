@@ -9,14 +9,14 @@ class QPixmap;
 class ModelManager;
 
 class MainWindow : public QMainWindow {
-public:
+  public:
     explicit MainWindow(QWidget *parent = nullptr);
 
     void setImage(QPixmap &map);
 
     void setModelManager(std::shared_ptr<ModelManager> manager);
 
-private:
+  private:
     std::string imageFilename;
     std::shared_ptr<ModelManager> modelManager;
     std::shared_ptr<QPushButton> loadButton;
@@ -28,5 +28,4 @@ private:
     void onRunButtonClicked();
 };
 
-
-#endif //STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
+#endif // STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP

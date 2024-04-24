@@ -41,7 +41,7 @@ jobs:
 
     - name: Install extra libraries
       run: |
-        sudo apt install libfmt libfmt-dev
+        sudo apt install libfmt-dev
 
     - name: Configure Project
       uses: threeal/cmake-action@v1.3.0
