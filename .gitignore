@@ -591,3 +591,4 @@ src/vcpkg_installed
 saved_image.png
 
 .vscode
+doc/generated

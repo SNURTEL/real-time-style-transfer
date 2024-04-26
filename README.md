@@ -41,6 +41,15 @@ cd src
 ctest --preset test-unix-gcc
 ```
 
+#### Build documentation
+
+Using `doxygen`
+
+```shell
+doxygen Doxyfile
+firefox doc/generated/html/index.html
+```
+
 #### Alternative: using `vcpkg`
 - If you have plenty of time and CPU horsepower and you *really* don't want to clutter up your system with extra libraries, you can try using `vcpkg` to pull and build dependencies from source (this is not recommended and has a good chance of failing). Also note that `vcpkg` port versions may differ slightly from requirements.  Init `vcpkg` as submodule:
 
