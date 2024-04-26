@@ -8,8 +8,8 @@ ModelManager::ModelManager() {}
 
 bool ModelManager::loadModel(std::string filename) {
     try {
-        module = std::make_shared<torch::jit::Module>(
-            std::move(torch::jit::load(filename)));
+        module =
+            std::make_shared<torch::jit::Module>(torch::jit::load(filename));
     } catch (const c10::Error &e) {
         return false;
     }
@@ -25,7 +25,7 @@ std::optional<at::Tensor> ModelManager::loadImage(std::string filename) {
         return std::nullopt;
     }
 
-    return std::make_optional(std::move(to_tensor(image)));
+    return std::make_optional(to_tensor(image));
 }
 
 int ModelManager::predict(at::Tensor input) {

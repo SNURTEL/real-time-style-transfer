@@ -12,7 +12,10 @@
             "displayName": "base Configuration",
             "description": "Default build using Ninja generator",
             "generator": "Ninja",
-            "binaryDir": "build/${presetName}"
+            "binaryDir": "build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
         },
         {
             "name": "unix-gcc",
@@ -30,7 +33,7 @@
         {
             "name": "unix-gcc-no-cuda",
             "displayName": "Unix GCC without CUDA",
-            "description": "Unix build with GCC/G++ without CUDA",
+            "description": "Unix build with GCC/G++ without CUDA (for CI)",
             "inherits": "unix-gcc",
             "cacheVariables": {
                 "NO_USE_CUDA": "ON"
@@ -57,7 +60,7 @@
         {
             "name": "test-unix-gcc-no-cuda",
             "description": "Test Unix GCC no CUDA",
-            "displayName": "Test Unix GCC without CUDA",
+            "displayName": "Test Unix GCC without CUDA (for CI)",
             "inherits": "test-base",
             "configurePreset": "unix-gcc-no-cuda"
         }

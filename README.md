@@ -19,26 +19,27 @@ Description goes here.
 Assuming you have installed all dependencies, run `cmake` to configure the build (this will take a second, since cmake will need to fetch the Catch2 library):
 
 ```shell
-cmake -S src -B build
+cmake -S src --preset=<PRESET_NAME>
 ```
+
+For convenience, we will assume you are using the `unix-gcc` preset. Consult `src/CMakePresets.json`.
 
 If your cmake struggles to find CUDA, Libtorch or OpenCV, you can specify their location by setting the respective env variable:
 - CUDA - `CUDACXX=/path/to/cuda/nvcc` (usually something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`)
 - Libtorch - `Torch_DIR`
 - OpenCV - `OpenCV_DIR`
 
-
 Finally, build the actual package:
 
 ```shell
-cmake --build build
+cmake --build src/build/unix-gcc
 ```
 
 #### Run tests
 ```shell
-ctest --test-dir build
+cd src
+ctest --preset test-unix-gcc
 ```
-
 
 #### Alternative: using `vcpkg`
 - If you have plenty of time and CPU horsepower and you *really* don't want to clutter up your system with extra libraries, you can try using `vcpkg` to pull and build dependencies from source (this is not recommended and has a good chance of failing). Also note that `vcpkg` port versions may differ slightly from requirements.  Init `vcpkg` as submodule:
@@ -54,7 +55,7 @@ export PATH=$VCPKG_ROOT:$PATH
 Add a `USE_VCPKG` flag to cmake. Dependencies will be fetched while configuring the project
 
 ```shell
-cmake -S src -B build -DUSE_VCPKG
+cmake -S src --preset=unix-gcc -DUSE_VCPKG
 ```
 
 Those libraries may come in handy:
@@ -87,8 +88,7 @@ Before submitting a PR:
 
 2. Lint with `clang-tidy` and `cppcheck`
 ```shell
-# NOTE! Project has to be configured with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
-./utils/lint-clang-tidy.sh
+./utils/lint-clang-tidy.sh unix-gcc
 
 ./utils/lint-cppcheck.sh
 ```
