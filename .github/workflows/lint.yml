@@ -13,7 +13,7 @@ jobs:
 
       - name: Install utils
         run: |
-          sudo apt-get install -y wget unzip
+          sudo apt-get install -y wget unzip ninja-build
 
       - name: Install pre-built OpenCV
         run: |
@@ -52,20 +52,16 @@ jobs:
         uses: threeal/cmake-action@v1.3.0
         with:
           source-dir: src
-          build-dir: build
-          generator: Ninja
-          c-compiler: gcc
-          cxx-compiler: g++
+          build-dir: src/build/unix-gcc-no-cuda
           args:
-            -DNO_USE_CUDA=ON
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            --preset=unix-gcc-no-cuda
           build-args:
-            -j10
+            -j10 -lfmt
 
       - name: Run clang-tidy
         run: |
           chmod +x utils/lint-clang-tidy.sh
-          ./utils/lint-clang-tidy.sh
+          ./utils/lint-clang-tidy.sh unix-gcc-no-cuda
   cppcheck:
     name: Run cppcheck analysis
     runs-on: ubuntu-latest
