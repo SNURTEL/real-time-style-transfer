@@ -1,0 +1,65 @@
+{
+    "version": 2,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "config-base",
+            "hidden": true,
+            "displayName": "base Configuration",
+            "description": "Default build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "build/${presetName}"
+        },
+        {
+            "name": "unix-gcc",
+            "displayName": "Unix GCC",
+            "description": "Unix build with GCC/G++",
+            "inherits": "config-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_FLAGS": "-Wall -Wextra -Werror -pedantic -fsanitize=undefined -Wshadow -Wundef -fno-common",
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Werror -pedantic -fsanitize=undefined -Wshadow -Wundef -fno-common",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+            }
+        },
+        {
+            "name": "unix-gcc-no-cuda",
+            "displayName": "Unix GCC without CUDA",
+            "description": "Unix build with GCC/G++ without CUDA",
+            "inherits": "unix-gcc",
+            "cacheVariables": {
+                "NO_USE_CUDA": "ON"
+            }
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "test-base",
+            "hidden": true,
+            "description": "Base test preset",
+            "displayName": "Test base",
+            "execution": {
+                "noTestsAction": "error"
+            }
+        },
+        {
+            "name": "test-unix-gcc",
+            "description": "Test Unix GCC",
+            "displayName": "Test Unix GCC",
+            "inherits": "test-base",
+            "configurePreset": "unix-gcc"
+        },
+        {
+            "name": "test-unix-gcc-no-cuda",
+            "description": "Test Unix GCC no CUDA",
+            "displayName": "Test Unix GCC without CUDA",
+            "inherits": "test-base",
+            "configurePreset": "unix-gcc-no-cuda"
+        }
+    ]
+}

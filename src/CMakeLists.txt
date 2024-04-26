@@ -11,6 +11,7 @@ set(VCPKG_MANIFEST_MODE ON)
 
 # [Setup/C++]
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEFINED_IN_CMAKELISTS")
 
 # [Setup/Qt]
 set(CMAKE_AUTOMOC ON)
@@ -41,7 +42,7 @@ find_package(Torch REQUIRED)
 # [Setup/Package] OpenCV
 find_package(OpenCV REQUIRED)
 set(OpenCV_DIR ${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
 # [Setup/Package] Qt6
 # [Windows/Bugs] Due to bugs, variable is set directly in CMakeLists
@@ -51,7 +52,7 @@ ENDIF ()
 find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 
 # apt does not have QT 6.3, which introduces `qt_standard_project_setup`
-if (Qt6Core_VERSION VERSION_LESS "6.4")
+if (Qt6Core_VERSION VERSION_LESS "6.3")
     message( "Qt version lower that 6.3; cannot use qt_standard_project_setup" )
     set(CMAKE_AUTOMOC ON) 
     set(CMAKE_AUTORCC ON) 
