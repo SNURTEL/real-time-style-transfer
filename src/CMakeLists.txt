@@ -97,7 +97,9 @@ qt_add_executable(app MANUAL_FINALIZATION main.cpp
 )
 target_link_libraries(app PRIVATE model)
 target_link_libraries(app PRIVATE Qt6::Widgets)
-target_link_libraries(app PUBLIC fmt)
+if (UNIX)
+    target_link_libraries(app PUBLIC fmt)
+endif()
 set_property(TARGET app PROPERTY CXX_STANDARD 20)
 qt_finalize_executable(app)
 
