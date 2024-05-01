@@ -8,12 +8,26 @@ class QLabel;
 class QPixmap;
 class ModelManager;
 
+/**
+ * @brief Main application window
+ *
+ */
 class MainWindow : public QMainWindow {
   public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+    /**
+     * @brief Display a given image
+     *
+     * @param map
+     */
     void setImage(QPixmap &map);
 
+    /**
+     * @brief Set the Model Manager object
+     *
+     * @param manager
+     */
     void setModelManager(std::shared_ptr<ModelManager> manager);
 
   private:

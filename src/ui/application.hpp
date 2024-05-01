@@ -7,13 +7,26 @@ class ModelManager;
 
 class MainWindow;
 
+/**
+ * @brief Main Qt application class.
+ *
+ */
 class StyleApplication : public QApplication {
   public:
     StyleApplication(int argc, char *argv[],
                      const std::shared_ptr<ModelManager> &manager);
 
   private:
+    /**
+     * @brief Model manager
+     *
+     */
     std::shared_ptr<ModelManager> modelManager;
+
+    /**
+     * @brief Main Qt window
+     *
+     */
     std::shared_ptr<MainWindow> mainWindow;
 };
 

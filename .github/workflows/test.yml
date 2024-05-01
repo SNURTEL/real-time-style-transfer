@@ -14,7 +14,7 @@ jobs:
 
     - name: Install utils
       run: |
-        sudo apt-get install -y wget unzip
+        sudo apt-get install -y wget unzip ninja-build
 
     - name: Install pre-built OpenCV
       run: |
@@ -47,19 +47,17 @@ jobs:
       uses: threeal/cmake-action@v1.3.0
       with:
         source-dir: src
-        build-dir: build
-        generator: Ninja
-        c-compiler: gcc
-        cxx-compiler: g++
+        build-dir: src/build/unix-gcc-no-cuda
         args:
-          -DNO_USE_CUDA=ON
+          --preset=unix-gcc-no-cuda
         build-args:
           -j10 -lfmt
 
     - name: Build project
       run: |
-        cmake --build build
+        cmake --build src/build/unix-gcc-no-cuda
 
     - name: Run unit tests
       run: |
-        ctest --test-dir build
+        cd src
+        ctest --preset test-unix-gcc-no-cuda
