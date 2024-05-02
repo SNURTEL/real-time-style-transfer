@@ -4,6 +4,7 @@ project(common)
 
 add_library(common
     manager.cpp
+    camera.cpp
 )
 
 set_property(TARGET common PROPERTY CXX_STANDARD 20)
