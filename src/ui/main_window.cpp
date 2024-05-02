@@ -2,7 +2,7 @@
 #include <memory>
 #include <utility>
 
-#include "../model/manager.hpp"
+#include "common/manager.hpp"
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QString>
 
-#include "main_window.hpp"
+#include "ui/main_window.hpp"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("Style Transfer Main Window");

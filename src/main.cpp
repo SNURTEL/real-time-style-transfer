@@ -1,4 +1,4 @@
-#include "model/manager.hpp"
+#include "common/manager.hpp"
 #include "ui/application.hpp"
 
 int main(int argc, char *argv[]) {

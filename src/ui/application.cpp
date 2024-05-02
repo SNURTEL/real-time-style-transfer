@@ -1,8 +1,8 @@
 #include <memory>
 
-#include "../model/manager.hpp"
-#include "application.hpp"
-#include "main_window.hpp"
+#include "common/manager.hpp"
+#include "ui/application.hpp"
+#include "ui/main_window.hpp"
 
 StyleApplication::StyleApplication(int argc, char **argv,
                                    const std::shared_ptr<ModelManager> &manager)
