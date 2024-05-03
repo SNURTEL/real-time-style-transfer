@@ -29,6 +29,8 @@ class ModelManager {
      */
     int predict(at::Tensor input);
 
+    at::Tensor forward(at::Tensor input);
+
     /**
      * @brief Loads an image from file as cv::Mat in grayscale.
      *

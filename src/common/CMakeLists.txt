@@ -5,6 +5,7 @@ project(common)
 add_library(common
     manager.cpp
     camera.cpp
+    utils.cpp
 )
 
 set_property(TARGET common PROPERTY CXX_STANDARD 20)

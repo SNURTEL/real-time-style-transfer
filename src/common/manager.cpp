@@ -28,18 +28,21 @@ std::optional<at::Tensor> ModelManager::loadImage(std::string filename) {
     return std::make_optional(to_tensor(image));
 }
 
-int ModelManager::predict(at::Tensor input) {
+at::Tensor ModelManager::forward(at::Tensor input) {
     input = input.to(torch::kFloat32);
 
     std::vector<torch::jit::IValue> batch;
     batch.push_back(input);
 
+    return module.get()->forward(batch).toTensor();
+}
+
+int ModelManager::predict(at::Tensor input) {
     if (!module) {
         return -1;
     }
 
-    auto output = module.get()->forward(batch);
-    int out_class = torch::argmax(output.toTensor()).item<int>();
+    int out_class = torch::argmax(forward(input)).item<int>();
     return out_class;
 }
 
