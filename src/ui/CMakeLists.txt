@@ -27,8 +27,8 @@ endif ()
 
 # [Project/Build] Library
 add_library(ui
-    application.cpp
-    main_window.cpp
+    # application.cpp
+    # main_window.cpp
     resources.qrc
 )
 target_include_directories(ui 

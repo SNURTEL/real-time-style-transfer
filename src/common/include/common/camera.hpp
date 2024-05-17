@@ -2,12 +2,13 @@
 #define __CAMERA_H__
 
 #include <istream>
-#include <optional>
 #include <opencv2/videoio.hpp>
+#include <optional>
 
 class Camera {
   public:
-    static std::optional<Camera> build(int device = 0, int apiPreference = cv::CAP_ANY);
+    static std::optional<Camera> build(int device = 0,
+                                       int apiPreference = cv::CAP_ANY);
 
     std::optional<cv::Mat> nextFrame();
 

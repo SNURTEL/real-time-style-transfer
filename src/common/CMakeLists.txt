@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 project(common)
 
 add_library(common
-    manager.cpp
+    model.cpp
     camera.cpp
     utils.cpp
 )
