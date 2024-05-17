@@ -1,15 +1,14 @@
-#include "common/camera.hpp"
-#include "common/model.hpp"
-#include "common/modelLoadingError.hpp"
-#include "common/utils.hpp"
-#include "ui/application.hpp"
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
-#include <ostream>
 #include <torch/types.h>
+
+#include "common/camera.hpp"
+#include "common/model.hpp"
+#include "common/utils.hpp"
+#include "ui/application.hpp"
 
 int main(int, char *[]) {
     const std::string MODEL_FILE = "models/style_vangogh.ts";

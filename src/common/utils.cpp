@@ -1,9 +1,11 @@
-#include "common/utils.hpp"
-#include <ATen/core/TensorBody.h>
 #include <c10/core/ScalarType.h>
 #include <cstring>
+
+#include <ATen/core/TensorBody.h>
 #include <opencv2/core.hpp>
 #include <torch/script.h>
+
+#include "common/utils.hpp"
 
 at::Tensor cv2ToTensor(const cv::Mat &image, bool copy) {
     at::Tensor temp =

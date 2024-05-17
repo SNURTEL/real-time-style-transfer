@@ -1,12 +1,13 @@
-#include "common/model.hpp"
-#include "common/modelLoadingError.hpp"
+#include <optional>
+#include <string>
+
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
-#include <optional>
-#include <string>
 #include <torch/csrc/jit/api/module.h>
 #include <torch/script.h>
+
+#include "common/model.hpp"
 
 at::Tensor Model::forward(const at::Tensor &input) {
     auto inputConv = input.to(torch::kFloat32);

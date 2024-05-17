@@ -1,10 +1,11 @@
-#include "common/camera.hpp"
-#include <exception>
 #include <istream>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/videoio.hpp>
 #include <optional>
 #include <string>
+
+#include <opencv2/core/mat.hpp>
+#include <opencv2/videoio.hpp>
+
+#include "common/camera.hpp"
 
 Camera::Camera(cv::VideoCapture videoCapture) : _videoCapture(videoCapture) {}
 
