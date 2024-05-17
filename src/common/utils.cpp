@@ -6,11 +6,11 @@
 #include <torch/script.h>
 
 at::Tensor cv2ToTensor(const cv::Mat &image, bool copy) {
-    at::Tensor temp =  torch::from_blob(image.data,
-                            {image.rows, image.cols, image.channels()},
-                            torch::kByte)
-        .permute({2, 0, 1})
-        .unsqueeze(0);
+    at::Tensor temp =
+        torch::from_blob(image.data, {image.rows, image.cols, image.channels()},
+                         torch::kByte)
+            .permute({2, 0, 1})
+            .unsqueeze(0);
     return copy ? temp.clone() : temp;
 }
 

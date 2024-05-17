@@ -8,6 +8,6 @@
  * @param image
  * @return at::Tensor
  */
-at::Tensor cv2ToTensor(const cv::Mat &image, bool copy=false);
+at::Tensor cv2ToTensor(const cv::Mat &image, bool copy = false);
 
-cv::Mat tensorToCv2(const at::Tensor &tensor, bool copy=false);
+cv::Mat tensorToCv2(const at::Tensor &tensor, bool copy = false);
