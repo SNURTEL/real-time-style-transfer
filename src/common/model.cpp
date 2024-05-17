@@ -8,7 +8,6 @@
 #include <torch/csrc/jit/api/module.h>
 #include <torch/script.h>
 
-
 at::Tensor Model::forward(const at::Tensor &input) {
     auto inputConv = input.to(torch::kFloat32);
 
@@ -18,11 +17,9 @@ at::Tensor Model::forward(const at::Tensor &input) {
     return _module.forward(batch).toTensor();
 }
 
-Model::Model(const torch::jit::Module &module) : _module(module) {};
+Model::Model(const torch::jit::Module &module) : _module(module){};
 
-
-std::optional<Model> Model::fromFile(const std::string &path)
-{
+std::optional<Model> Model::fromFile(const std::string &path) {
     try {
         return std::make_optional(Model(torch::jit::load(path)));
     } catch (const c10::Error &e) {
