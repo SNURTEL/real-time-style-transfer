@@ -19,12 +19,6 @@ IF (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.7.0/msvc2019_64")
 ENDIF ()
 
-# [Windows/MSVC]: Enable building Qt applications under MSVC
-if (MSVC)
-    target_compile_options(ui PUBLIC "/Zc:__cplusplus" "/permissive-")
-endif ()
-
-
 # [Project/Build] Library
 add_library(ui
     # application.cpp
@@ -42,3 +36,7 @@ target_link_libraries(ui PRIVATE Qt6::Widgets)
 
 target_link_libraries(ui PRIVATE common)
 
+# [Windows/MSVC]: Enable building Qt applications under MSVC
+if (MSVC)
+    target_compile_options(ui PUBLIC "/Zc:__cplusplus" "/permissive-")
+endif ()

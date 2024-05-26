@@ -4,13 +4,17 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <torch/types.h>
+#include <filesystem>
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
 #include "common/utils.hpp"
 #include "ui/application.hpp"
 
+namespace fs = std::filesystem;
+
 int main(int, char *[]) {
+    std::cout << "Current path is " << fs::current_path() << '\n';
     const std::string MODEL_FILE = "models/style_vangogh.ts";
 
     auto _model = Model::fromFile(MODEL_FILE);
