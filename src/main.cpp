@@ -1,10 +1,10 @@
+#include <filesystem>
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <torch/types.h>
-#include <filesystem>
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
