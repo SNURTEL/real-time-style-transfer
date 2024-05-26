@@ -18,7 +18,7 @@ at::Tensor Model::forward(const at::Tensor &input) {
     return _module.forward(batch).toTensor();
 }
 
-Model::Model(const torch::jit::Module &module) : _module(module) {};
+Model::Model(const torch::jit::Module &module) : _module(module){};
 
 std::optional<Model> Model::fromFile(const std::string &path) {
     try {
