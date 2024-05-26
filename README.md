@@ -10,6 +10,7 @@ Description goes here.
 - OpenCV (4.5.5)
    - Depending on your system, `libfmt-dev` / `fmt-devel` may also be needed
 - Libtorch (6.3.1)
+- CPython 3.12
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
 - _(optional)_ `cppcheck`
@@ -77,6 +78,8 @@ sudo apt install libXtst libxtst-dev libtool pkg-config autoconf-archive gfortra
 sudo dnf install libXtst-devel libtool pkg-config autoconf-archive gfortran cudnn9-cuda-12  # or cudnn9-cuda-11
 ```
 
+
+
 #### Windows
 1. Download Cuda Toolkit and add path to kit to Path variable
 2. Download Torch and add path to Path variable
@@ -84,6 +87,18 @@ sudo dnf install libXtst-devel libtool pkg-config autoconf-archive gfortran cudn
    - set `OpenCV_DIR` variable with value of downloaded library path
 4. Install QT 6.7.0 with MSVC toolchain to directory `C:/QT`
    - set `QT_QPA_PLATFORM_PLUGIN_PATH` variable to path to `C:/Qt/6.7.0/<msvc qt toolchain version>/plugins/platforms`
+
+## Model
+1. Install dependencies for python3
+```shell
+pip3 install numpy
+pip3 install Pillow
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+2. Run script
+```shell
+python3 scripts/create-cyclegan-pretrained.py
+```
 
 ## Contributing
 

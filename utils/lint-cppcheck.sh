@@ -2,4 +2,7 @@
 
 set -o xtrace
 
-cppcheck --enable=all --suppressions-list=src/.suppressions.txt  --error-exitcode=1 $(find src -not -path "src/vcpkg**" -not -path "src/build**" \( -iname "*.cpp" -or -iname "*.h" -or -iname "*.hpp" \) )
+SOURCES=$(find src -not -path "src/vcpkg**" -not -path "src/build**" -iname "*.cpp" | tr '\n' ' ')
+INCLUDES=$(find src -type d -not -path "src/vcpkg**" -not -path "src/build**" -path "**/include" | sed -e "s/.*/-I &/" | tr '\n' ' ')
+
+cppcheck --enable=all --suppressions-list=src/.suppressions.txt  --error-exitcode=1 --check-config --inline-suppr $SOURCES $INCLUDES
