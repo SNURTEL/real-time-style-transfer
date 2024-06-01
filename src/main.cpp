@@ -1,3 +1,4 @@
+#include <cassert>
 #include <filesystem>
 #include <iostream>
 #include <opencv2/core.hpp>
@@ -8,6 +9,7 @@
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
+#include "common/model_manager.hpp"
 #include "common/utils.hpp"
 #include "ui/application.hpp"
 
@@ -15,6 +17,12 @@ namespace fs = std::filesystem;
 
 int main(int, char *[]) {
     std::cout << "Current path is " << fs::current_path() << '\n';
+
+    auto aaa = modelManager::PretrainedModel::style_vangogh;
+    assert(aaa == modelManager::PretrainedModel::style_vangogh); 
+
+    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
+    
     const std::string MODEL_FILE = "models/style_vangogh.ts";
 
     auto _model = Model::fromFile(MODEL_FILE);

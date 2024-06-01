@@ -45,6 +45,9 @@ include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 # [Setup/Package] Qt6
 find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 
+# [Setup/Package] Python
+find_package(Python REQUIRED Development)
+
 IF (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.7.0/msvc2019_64")
 ENDIF ()
