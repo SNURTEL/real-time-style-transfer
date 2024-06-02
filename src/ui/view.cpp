@@ -2,44 +2,50 @@
 #include "ui/pages/camera_page.hpp"
 #include "ui/pages/image_page.hpp"
 #include "ui/pages/models_page.hpp"
-#include "ui/pages/epage.hpp"
+#include "ui/pages/page_index.hpp"
 
 View::View(QWidget *parent) : QStackedWidget(parent) {
     setupUi();
+    _currentPageIndex = PageIndex::ImageInference;
 }
 
 void View::setupUi() {
-    _pages[EPage::ImageInference] = std::make_shared<ImagePage>(this);
-    _pages[EPage::CameraInference] = std::make_shared<CameraPage>(this);
-    _pages[EPage::Models] = std::make_shared<ModelsPage>(this);
+    _pages[PageIndex::ImageInference] = std::make_shared<ImagePage>(this);
+    _pages[PageIndex::CameraInference] = std::make_shared<CameraPage>(this);
+    _pages[PageIndex::Models] = std::make_shared<ModelsPage>(this);
 
-    _activePage = getPage(EPage::ImageInference);
-
-    for (auto & page : _pages) {
+    for (auto &page: _pages) {
         this->addWidget(page.second.get());
     }
-    // endregion
 }
 
-void View::switchPage(EPage page) {
-    std::shared_ptr<Page> pageImpl = getPage(page);
+void View::switchPage(PageIndex pageIndex) {
+    std::shared_ptr<Page> page = getPage(pageIndex);
+    std::shared_ptr<Page> currentPage = getCurrentPage();
 
-    int index = indexOf(pageImpl.get());
+    int index = indexOf(page.get());
     if (index == -1) {
         throw std::runtime_error("Page is not added to view!");
     }
 
-    _activePage->deactivatePage();
-
+    currentPage->deactivatePage();
     setCurrentIndex(index);
-    _activePage = pageImpl;
-    _activePage->activatePage();
+    page->activatePage();
+    _currentPageIndex = pageIndex;
 }
 
-std::shared_ptr<Page> View::getPage(EPage page) {
+std::shared_ptr<Page> View::getPage(PageIndex page) {
     if (!_pages.contains(page)) {
         throw std::runtime_error("Cannot find this page!");
     }
 
     return _pages[page];
+}
+
+std::shared_ptr<Page> View::getCurrentPage() {
+    return getPage(_currentPageIndex);
+}
+
+PageIndex View::getCurrentPageIndex() {
+    return _currentPageIndex;
 }

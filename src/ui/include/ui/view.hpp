@@ -3,15 +3,9 @@
 
 #include <QStackedWidget>
 
-class ImagePage;
-
-class CameraPage;
-
-class ModelsPage;
-
-enum class EPage;
-
 class Page;
+
+enum class PageIndex;
 
 
 class View : public QStackedWidget {
@@ -20,12 +14,16 @@ public:
 
     void setupUi();
 
-    void switchPage(EPage page);
+    void switchPage(PageIndex pageIndex);
+
+    std::shared_ptr<Page> getPage(PageIndex page);
+
+    std::shared_ptr<Page> getCurrentPage();
+
+    PageIndex getCurrentPageIndex();
 private:
-    std::shared_ptr<Page> getPage(EPage page);
-private:
-    std::shared_ptr<Page> _activePage;
-    std::map<EPage, std::shared_ptr<Page>> _pages;
+    PageIndex _currentPageIndex;
+    std::map<PageIndex, std::shared_ptr<Page>> _pages;
 };
 
 

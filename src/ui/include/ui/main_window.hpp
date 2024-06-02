@@ -14,7 +14,7 @@ class QWidget;
 
 class View;
 
-enum class EPage;
+enum class PageIndex;
 
 
 /**
@@ -26,7 +26,7 @@ public:
 
     void setupUi();
 private:
-    void switchPage(EPage page, bool checked = false);
+    void switchPage(PageIndex page, bool checked = false);
 private:
     std::shared_ptr<QAction> _imageInferenceAction;
     std::shared_ptr<QAction> _cameraInferenceAction;

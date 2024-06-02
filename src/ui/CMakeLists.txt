@@ -20,6 +20,7 @@ add_library(ui
         application.cpp
         main_window.cpp
         view.cpp
+        pages/page.cpp
         pages/image_page.cpp
         pages/camera_page.cpp
         pages/models_page.cpp

@@ -9,9 +9,9 @@ void ModelsPage::setupUi() {
 }
 
 void ModelsPage::activatePage() {
-
+    Page::activatePage();
 }
 
 void ModelsPage::deactivatePage() {
-
+    Page::deactivatePage();
 }

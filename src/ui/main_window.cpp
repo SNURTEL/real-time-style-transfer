@@ -5,7 +5,7 @@
 
 #include "ui/main_window.hpp"
 #include "ui/view.hpp"
-#include "ui/pages/epage.hpp"
+#include "ui/pages/page_index.hpp"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -81,20 +81,20 @@ void MainWindow::setupUi() {
 
     // region Connect actions to slots
     connect(_imageInferenceAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(EPage::ImageInference, checked);
+        this->switchPage(PageIndex::ImageInference, checked);
     });
     connect(_cameraInferenceAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(EPage::CameraInference, checked);
+        this->switchPage(PageIndex::CameraInference, checked);
     });
     connect(_modelsAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(EPage::Models, checked);
+        this->switchPage(PageIndex::Models, checked);
     });
     // endregion
 
     this->setCentralWidget(_centralWidget.get());
 }
 
-void MainWindow::switchPage(EPage page, bool checked) {
+void MainWindow::switchPage(PageIndex page, bool checked) {
     if (!checked) {
         return;
     }

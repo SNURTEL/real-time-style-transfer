@@ -9,9 +9,9 @@ void CameraPage::setupUi() {
 }
 
 void CameraPage::activatePage() {
-
+    Page::activatePage();
 }
 
 void CameraPage::deactivatePage() {
-
+    Page::deactivatePage();
 }

@@ -12,11 +12,11 @@ void ImagePage::setupUi() {
 }
 
 void ImagePage::activatePage() {
-
+    Page::activatePage();
 }
 
 void ImagePage::deactivatePage() {
-
+    Page::deactivatePage();
 }
 
 
