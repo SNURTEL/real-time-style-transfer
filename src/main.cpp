@@ -18,9 +18,6 @@ namespace fs = std::filesystem;
 int main(int, char *[]) {
     std::cout << "Current path is " << fs::current_path() << '\n';
 
-    auto aaa = modelManager::PretrainedModel::style_vangogh;
-    assert(aaa == modelManager::PretrainedModel::style_vangogh); 
-
     auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
     
     const std::string MODEL_FILE = "models/style_vangogh.ts";

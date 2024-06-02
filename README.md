@@ -30,6 +30,8 @@ If your cmake struggles to find CUDA, Libtorch or OpenCV, you can specify their 
 - Libtorch - `Torch_DIR`
 - OpenCV - `OpenCV_DIR`
 
+If you want to download models directly from the app, python development headers mus be installed. CMake will look from for version 3.9-3.12 automatically, you can also specify a version explicitly with `-DPYTHON_VERSION=<python3XX>`
+
 Finally, build the actual package:
 
 ```shell

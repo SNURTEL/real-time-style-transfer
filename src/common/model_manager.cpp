@@ -1,10 +1,14 @@
 #include <cassert>
 #include <map>
 #include <optional>
+#include <ostream>
 #include <stdexcept>
 #include <string>
-#include <Python.h>
+#include <iostream>
 #include "common/model_manager.hpp"
+#include <boost/python.hpp>
+
+namespace py = boost::python;
 
 std::string modelManager::pretrainedModelToString(PretrainedModel model) {
     switch (model) {
@@ -62,12 +66,29 @@ std::optional<std::set<modelManager::PretrainedModel>> modelManager::getDownload
 
 std::optional<std::filesystem::path> modelManager::downloadModel(modelManager::PretrainedModel model) {
     assert(model);
-    Py_Initialize();
-    PyRun_SimpleString("from time import time,ctime\n"
-                        "print('Today is', ctime(time()))");
-    if (Py_FinalizeEx() < 0) {
-        exit(120);
-    }
+
+    py::object sys = py::import("sys");
+
+
+
+    // C API
+    // std::cout << "Initialize" << std::endl; 
+    // Py_Initialize();
+
+    // PyObject *sys = PyImport_ImportModule("sys");
+    // PyObject *path = PyObject_GetAttrString(sys, "path");
+    // PyList_Append(path, PyUnicode_FromString("scripts"));
+
+    // std::cout << "Importing module" << std::endl; 
+    // auto module = PyImport_ImportModule("test");
+    // if (module == nullptr) {
+    //     std::cout << "Module is null" << std::endl; 
+    // }
+    // std::cout << "Getting func" << std::endl; 
+    // auto func = PyObject_GetAttrString(module, "main");
+    // std::cout << "Calling func" << std::endl; 
+    // auto res = PyObject_CallObject(func, PyTuple_New(0));
+    // std::cout << PyLong_AsLong(res) << std::endl; 
 
     return std::nullopt;
 }
