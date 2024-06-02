@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 
-
 class QAction;
 
 class QVBoxLayout;
@@ -11,6 +10,8 @@ class QVBoxLayout;
 class QToolBar;
 
 class QWidget;
+
+class View;
 
 
 /**
@@ -27,9 +28,10 @@ private:
     std::shared_ptr<QAction> _cameraInferenceAction;
     std::shared_ptr<QAction> _modelsAction;
 
-    std::shared_ptr<QWidget> centralWidget;
-    std::shared_ptr<QVBoxLayout> centralLayout;
+    std::shared_ptr<QWidget> _centralWidget;
+    std::shared_ptr<QVBoxLayout> _centralLayout;
     std::shared_ptr<QToolBar> _toolBar;
+    std::shared_ptr<View> _view;
 };
 
 #endif // STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP

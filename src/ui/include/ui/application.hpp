@@ -5,6 +5,7 @@
 
 class MainWindow;
 
+
 /**
  * @brief Main Qt application class
  */

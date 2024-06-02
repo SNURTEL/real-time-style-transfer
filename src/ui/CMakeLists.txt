@@ -19,8 +19,10 @@ ENDIF ()
 add_library(ui
         application.cpp
         main_window.cpp
+        view.cpp
         pages/image_page.cpp
         pages/camera_page.cpp
+        pages/models_page.cpp
         resources.qrc
 )
 target_include_directories(ui

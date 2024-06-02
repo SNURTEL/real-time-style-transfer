@@ -4,6 +4,8 @@
 #include <QWidget>
 
 #include "ui/main_window.hpp"
+#include "ui/view.hpp"
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUi();
@@ -57,12 +59,12 @@ void MainWindow::setupUi() {
     this->insertToolBarBreak(_toolBar.get());
     // endregion
 
-    // region Main Widget and Layout
-    centralWidget = std::make_shared<QWidget>(this);
-    centralWidget->setObjectName(QString::fromUtf8("CentralWidget"));
+    // region Create central widget and layout
+    _centralWidget = std::make_shared<QWidget>(this);
+    _centralWidget->setObjectName(QString::fromUtf8("CentralWidget"));
 
-    centralLayout = std::make_shared<QVBoxLayout>(centralWidget.get());
-    centralLayout->setObjectName(QString::fromUtf8("CentralLayout"));
+    _centralLayout = std::make_shared<QVBoxLayout>(_centralWidget.get());
+    _centralLayout->setObjectName(QString::fromUtf8("CentralLayout"));
     // endregion
 
     // region Add actions to toolbar
@@ -71,7 +73,10 @@ void MainWindow::setupUi() {
     _toolBar->addAction(_modelsAction.get());
     // endregion
 
-    // @TODO: Add elements to centralLayout
+    // region Add view to central layout
+    _view = std::make_shared<View>(this);
+    _centralLayout->addWidget(_view.get());
+    // endregion
 
-    this->setCentralWidget(centralWidget.get());
+    this->setCentralWidget(_centralWidget.get());
 }
