@@ -9,17 +9,23 @@ class CameraPage;
 
 class ModelsPage;
 
+enum class EPage;
+
+class Page;
+
 
 class View : public QStackedWidget {
 public:
-    View(QWidget *parent);
+    explicit View(QWidget *parent);
 
     void setupUi();
 
+    void switchPage(EPage page);
 private:
-    std::shared_ptr<ImagePage> _imagePage;
-    std::shared_ptr<CameraPage> _cameraPage;
-    std::shared_ptr<ModelsPage> _modelsPage;
+    std::shared_ptr<Page> getPage(EPage page);
+private:
+    std::shared_ptr<Page> _activePage;
+    std::map<EPage, std::shared_ptr<Page>> _pages;
 };
 
 

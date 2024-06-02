@@ -3,10 +3,10 @@
 
 #include <QWidget>
 
-#include "ipage.hpp"
+#include "page.hpp"
 
 
-class ModelsPage : public QWidget, public IPage {
+class ModelsPage : public Page {
 public:
     ModelsPage(QWidget *parent);
 

@@ -3,14 +3,14 @@
 
 #include <QWidget>
 
-#include "ipage.hpp"
+#include "page.hpp"
 
 class QPushButton;
 
 
-class ImagePage : public QWidget, public IPage {
+class ImagePage : public Page {
 public:
-    ImagePage(QWidget *parent);
+    explicit ImagePage(QWidget *parent);
 
     void setupUi();
 

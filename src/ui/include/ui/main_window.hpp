@@ -2,6 +2,7 @@
 #define STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
 
 #include <QMainWindow>
+#include <string>
 
 class QAction;
 
@@ -13,6 +14,8 @@ class QWidget;
 
 class View;
 
+enum class EPage;
+
 
 /**
  * @brief Main application window
@@ -22,7 +25,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
 
     void setupUi();
-
+private:
+    void switchPage(EPage page, bool checked = false);
 private:
     std::shared_ptr<QAction> _imageInferenceAction;
     std::shared_ptr<QAction> _cameraInferenceAction;

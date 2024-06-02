@@ -1,6 +1,6 @@
 #include "ui/pages/models_page.hpp"
 
-ModelsPage::ModelsPage(QWidget *parent) : QWidget(parent) {
+ModelsPage::ModelsPage(QWidget *parent) : Page(parent) {
     setupUi();
 }
 

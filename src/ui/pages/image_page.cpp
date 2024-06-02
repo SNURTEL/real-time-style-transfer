@@ -2,7 +2,7 @@
 
 #include "ui/pages/image_page.hpp"
 
-ImagePage::ImagePage(QWidget *parent) : QWidget(parent) {
+ImagePage::ImagePage(QWidget *parent) : Page(parent) {
     setupUi();
 }
 

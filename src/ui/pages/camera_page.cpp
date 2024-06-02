@@ -1,6 +1,6 @@
 #include "ui/pages/camera_page.hpp"
 
-CameraPage::CameraPage(QWidget *parent) : QWidget(parent) {
+CameraPage::CameraPage(QWidget *parent) : Page(parent) {
     setupUi();
 }
 

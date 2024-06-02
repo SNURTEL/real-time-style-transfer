@@ -3,10 +3,10 @@
 
 #include <QWidget>
 
-#include "ipage.hpp"
+#include "page.hpp"
 
 
-class CameraPage : public QWidget, public IPage {
+class CameraPage : public Page {
 public:
     CameraPage(QWidget *parent);
 
