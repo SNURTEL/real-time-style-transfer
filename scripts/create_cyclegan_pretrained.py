@@ -27,8 +27,8 @@ def _fetch_checkpoints(model: Model) -> Path:
     total_size = int(response.headers.get("content-length", 0))
     block_size = 1024
     
-    out_file = f"./checkpoints/{model.value}_pretrained/latest_net_G.pth"
-    os.makedirs(Path(out_file).parent, exist_ok=True)
+    out_file = Path(f"./checkpoints/{model.value}_pretrained/latest_net_G.pth")
+    os.makedirs(out_file.parent, exist_ok=True)
     try:
         with tqdm(
             total=total_size, unit="B", unit_scale=True, desc=f'Download "{model.value}" to {out_file}'
@@ -81,44 +81,52 @@ def _trace_model(model: Model, out_path: Path):
     example = torch.rand(1, 3, 256, 256).cuda()
     traced = torch.jit.trace(model.netG.module, example_inputs=example)
     traced.save(out_path)
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("model",  nargs='?', choices=[m.value for m in Model])
-    args = parser.parse_args()
-    model = Model(args.model)
-    traced_model_file = Path(f"{model.value}.ts")
     
+def get_model(model: Model) -> Path:
     cwd = Path.cwd()
     project_dir = cwd.parent if str(cwd).endswith("scripts") else cwd
     tmp_dir = project_dir / "models/tmp"
     cyclegan_dir = tmp_dir / "cyclegan"
+    traced_model_path = project_dir / "models" / Path(f"{model.value}.ts")
 
-    if cyclegan_dir.exists():
-        print("-- Pre-treined CycleGAN repo dir exists, skipping clone")
-    else:
-        print(f"-- Cloning repo to {cyclegan_dir.absolute()}")
-        _clone_repo(cyclegan_dir)
+    try:
+        if cyclegan_dir.exists():
+            print("-- Pre-treined CycleGAN repo dir exists, skipping clone")
+        else:
+            print(f"-- Cloning repo to {cyclegan_dir.absolute()}")
+            _clone_repo(cyclegan_dir)
 
-    os.chdir(cyclegan_dir)
-    checkpoints_dir = Path(f"checkpoints/{model}_pretrained")
+        os.chdir(cyclegan_dir)
+        checkpoints_dir = Path(f"checkpoints/{model.value}_pretrained")
 
-    if checkpoints_dir.exists():
-        print("-- Model dir exists, skipping fetch")
-    else:
-        print(f"Fetching model checkpoints to {checkpoints_dir.absolute()}")
-        _fetch_checkpoints(model)
+        if checkpoints_dir.exists():
+            print("-- Model dir exists, skipping fetch")
+        else:
+            print(f"Fetching model checkpoints to {checkpoints_dir.absolute()}")
+            _fetch_checkpoints(model)
 
-    traced_model_file = project_dir / f"models/{traced_model_file}"
 
-    if traced_model_file.exists():
-        print("-- Traced model file exists, skipping trace")
-    else:
-        print("-- Tracing model")
-        _trace_model(model, traced_model_file)
+        if traced_model_path.exists():
+            print("-- Traced model file exists, skipping trace")
+        else:
+            print("-- Tracing model")
+            _trace_model(model, traced_model_path)
 
-    print(f"\n-- All done!\n-- Model saved to {traced_model_file.absolute()}")
+        print(f"\n-- All done!\n-- Model saved to {traced_model_path.absolute()}")
+    finally:
+        os.chdir(cwd)
+    
+    return traced_model_path
+    
+
+
+def main() -> Path:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("model",  nargs='?', choices=[m.value for m in Model])
+    args = parser.parse_args()
+    model = Model(args.model)
+    
+    return get_model(model)
 
 
 if __name__ == "__main__":

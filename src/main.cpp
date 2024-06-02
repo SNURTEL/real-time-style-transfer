@@ -5,6 +5,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
+#include <ostream>
 #include <torch/types.h>
 
 #include "common/camera.hpp"
@@ -14,18 +15,26 @@
 #include "ui/application.hpp"
 
 namespace fs = std::filesystem;
+namespace mm = modelManager;
 
 int main(int, char *[]) {
     std::cout << "Current path is " << fs::current_path() << '\n';
 
-    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
-    
-    const std::string MODEL_FILE = "models/style_vangogh.ts";
+    auto targetModel = mm::PretrainedModel::style_vangogh;
 
-    auto _model = Model::fromFile(MODEL_FILE);
+    auto modelPath = mm::getOrDownloadModelPath(targetModel);
+
+    if (!modelPath) {
+        std::cout << "Could not get model path" << std::endl;
+        return -1;
+    }
+
+    std::cout << "Model path is " << modelPath.value() << std::endl;
+
+    auto _model = Model::fromFile(modelPath.value());
     if (!_model) {
-        std::cout << "Cannot load model. Check if " << MODEL_FILE << "  exists."
-                  << std::endl;
+        std::cout << "Cannot load model. Check if " << modelPath.value()
+                  << "  exists." << std::endl;
         return -1;
     }
 
