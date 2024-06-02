@@ -18,7 +18,7 @@ namespace fs = std::filesystem;
 int main(int, char *[]) {
     std::cout << "Current path is " << fs::current_path() << '\n';
 
-    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
+    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_ukiyoe);
     
     const std::string MODEL_FILE = "models/style_vangogh.ts";
 
@@ -59,7 +59,7 @@ int main(int, char *[]) {
         cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
                    cv::INTER_LINEAR);
 
-        cv::imshow("Live", upscaled.clone());
+        // cv::imshow("Live", upscaled.clone());
 
         if (cv::waitKey(5) >= 0)
             break;

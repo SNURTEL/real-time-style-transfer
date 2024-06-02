@@ -14,8 +14,7 @@
             "generator": "Ninja",
             "binaryDir": "build/${presetName}",
             "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "PYTHON_VERSION": "python310"
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {

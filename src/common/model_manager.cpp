@@ -9,6 +9,8 @@
 #include <iostream>
 #include "common/model_manager.hpp"
 #include <boost/python.hpp>
+#include <boost/algorithm/string.hpp>
+#include <Python.h>
 
 namespace py = boost::python;
 
@@ -68,6 +70,7 @@ std::optional<std::set<modelManager::PretrainedModel>> modelManager::getDownload
 
 std::optional<std::filesystem::path> modelManager::downloadModel(modelManager::PretrainedModel model) {
     assert(model);
+
     Py_Initialize();
 
     try
@@ -79,21 +82,29 @@ std::optional<std::filesystem::path> modelManager::downloadModel(modelManager::P
         py::object pathlib = py::import("pathlib");
         py::object Path = pathlib.attr("Path");
         py::object pythonpath = sys.attr("path");
-        pythonpath.attr("append")("scripts");
+        pythonpath.attr("append")("/home/tomek/zpr/24l-zpr/scripts");
 
         // TODO adjust for Windows
         py::object executablePath = Path(py::extract<std::string>(sys.attr("executable"))());
         py::object versionInfo = sys.attr("version_info");
-        py::object sitePackagesPath = py::str(executablePath.attr("parents")[1]) + "/lib/python" + py::str(versionInfo.attr("major")) + "." + py::str(versionInfo.attr("minor")) + "/site-packages";
 
+
+        py::object sitePackagesPath = py::str(executablePath.attr("parents")[1]) + "/lib/python" + py::str(versionInfo.attr("major")) + "." + py::str(versionInfo.attr("minor")) + "/site-packages";
+        py::object sitePackages64Path = py::str(executablePath.attr("parents")[1]) + "/lib64/python" + py::str(versionInfo.attr("major")) + "." + py::str(versionInfo.attr("minor")) + "/site-packages";
 
         std::cout << "Inferred site-packages path is " << py::extract<std::string>(py::str(sitePackagesPath))() << std::endl;
 
-        pythonpath.attr("insert")(0, py::extract<std::string>(py::str(sitePackagesPath))());
+        pythonpath.attr("append")( py::extract<std::string>(py::str(sitePackagesPath))());
+        pythonpath.attr("append")(py::extract<std::string>(py::str(sitePackages64Path))());
+        // pythonpath = py::list(py::extract<std::string>(py::str(sitePackagesPath))());
 
-        py::object test = py::import("test");
-        py::object res = test.attr("main")();
-        std::cout <<  py::extract<std::string>(res)() << std::endl;
+        py::object create_cyclegan_pretrained = py::import("create_cyclegan_pretrained");
+        py::object modelEnum = create_cyclegan_pretrained.attr("Model");
+        py::object modelEnumValue = modelEnum(modelManager::pretrainedModelToString(model));
+        py::object res = create_cyclegan_pretrained.attr("get_model")(modelEnumValue);
+
+
+        std::cout <<  py::extract<std::string>(py::str(res))() << std::endl;
 
     } catch (const py::error_already_set&) {
         PyErr_Print();

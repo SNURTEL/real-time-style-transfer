@@ -34,6 +34,8 @@ endif ()
 
 # [Setup/Package] Torch
 find_package(Torch REQUIRED)
+include(CMakePrintHelpers)
+cmake_print_variables(Torch_DIR)
 
 
 # [Setup/Package] OpenCV
@@ -87,6 +89,7 @@ qt_add_executable(app MANUAL_FINALIZATION main.cpp
         main.cpp
 )
 
+target_link_libraries(app PRIVATE ${OpenCV_LIBS})
 target_link_libraries(app PRIVATE common)
 target_link_libraries(app PRIVATE ui)
 if (UNIX)

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 project(common)
 include(CMakePrintHelpers)
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
+find_package(Python 3.10 EXACT REQUIRED COMPONENTS Interpreter Development)
 
 set(BOOST_INCLUDE_LIBRARIES python)
 set(BOOST_ENABLE_CMAKE ON)
@@ -29,7 +29,6 @@ target_include_directories(common
     PUBLIC 
         ${PROJECT_SOURCE_DIR}/include
 )
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
 # include_directories(${PYTHON_INCLUDE_DIRS})
 
 
