@@ -26,8 +26,6 @@ public:
 
     void setupUi();
 private:
-    void switchPage(PageIndex page, bool checked = false);
-private:
     std::shared_ptr<QAction> _imageInferenceAction;
     std::shared_ptr<QAction> _cameraInferenceAction;
     std::shared_ptr<QAction> _modelsAction;

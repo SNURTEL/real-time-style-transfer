@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <QPushButton>
 
 #include "ui/pages/image_page.hpp"
@@ -13,10 +15,12 @@ void ImagePage::setupUi() {
 
 void ImagePage::activatePage() {
     Page::activatePage();
+    std::cout << "Activate image";
 }
 
 void ImagePage::deactivatePage() {
     Page::deactivatePage();
+    std::cout << "Deactivate image";
 }
 
 

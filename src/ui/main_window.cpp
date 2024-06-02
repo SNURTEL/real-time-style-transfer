@@ -6,6 +6,9 @@
 #include "ui/main_window.hpp"
 #include "ui/view.hpp"
 #include "ui/pages/page_index.hpp"
+#include "ui/pages/camera_page.hpp"
+#include "ui/pages/image_page.hpp"
+#include "ui/pages/models_page.hpp"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
@@ -76,30 +79,11 @@ void MainWindow::setupUi() {
 
     // region Add view to central layout
     _view = std::make_shared<View>(this);
+    _view->addPage(PageIndex::ImageInference, std::make_shared<ImagePage>(_view.get()), _imageInferenceAction);
+    _view->addPage(PageIndex::CameraInference, std::make_shared<CameraPage>(_view.get()), _cameraInferenceAction);
+    _view->addPage(PageIndex::Models, std::make_shared<ModelsPage>(_view.get()), _modelsAction);
     _centralLayout->addWidget(_view.get());
     // endregion
 
-    // region Connect actions to slots
-    connect(_imageInferenceAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(PageIndex::ImageInference, checked);
-    });
-    connect(_cameraInferenceAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(PageIndex::CameraInference, checked);
-    });
-    connect(_modelsAction.get(), &QAction::triggered, this, [this](bool checked = false) {
-        this->switchPage(PageIndex::Models, checked);
-    });
-    // endregion
-
     this->setCentralWidget(_centralWidget.get());
-}
-
-void MainWindow::switchPage(PageIndex page, bool checked) {
-    if (!checked) {
-        return;
-    }
-
-    // @TODO: Add mutually exclusive to all actions - only one should be checked
-
-    _view->switchPage(page);
 }

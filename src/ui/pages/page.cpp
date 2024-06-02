@@ -1,5 +1,7 @@
 #include "ui/pages/page.hpp"
 
+
+
 void Page::activatePage() {
     _active = true;
 }

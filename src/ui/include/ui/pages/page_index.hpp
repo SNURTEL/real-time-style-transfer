@@ -4,7 +4,8 @@
 enum class PageIndex {
     ImageInference,
     CameraInference,
-    Models
+    Models,
+    Nothing
 };
 
 #endif //STYLE_APPLICATION_UI_PAGES_PAGE_INDEX_HPP

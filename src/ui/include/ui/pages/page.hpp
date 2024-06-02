@@ -15,7 +15,7 @@ public:
     virtual bool isActive();
 
 private:
-    bool _active;
+    bool _active{false};
 };
 
 #endif //STYLE_APPLICATION_UI_PAGES_PAGE_HPP
