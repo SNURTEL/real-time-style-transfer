@@ -1,4 +1,6 @@
+#include <boost/python/list.hpp>
 #include <cassert>
+#include <cmath>
 #include <map>
 #include <optional>
 #include <ostream>
@@ -66,9 +68,37 @@ std::optional<std::set<modelManager::PretrainedModel>> modelManager::getDownload
 
 std::optional<std::filesystem::path> modelManager::downloadModel(modelManager::PretrainedModel model) {
     assert(model);
+    Py_Initialize();
 
-    py::object sys = py::import("sys");
+    try
+    {
+        py::object sys = py::import("sys");
 
+        std::cout << "Interpreter path is " << py::extract<std::string>(sys.attr("executable"))() << std::endl;
+
+        py::object pathlib = py::import("pathlib");
+        py::object Path = pathlib.attr("Path");
+        py::object pythonpath = sys.attr("path");
+        pythonpath.attr("append")("scripts");
+
+        // TODO adjust for Windows
+        py::object executablePath = Path(py::extract<std::string>(sys.attr("executable"))());
+        py::object versionInfo = sys.attr("version_info");
+        py::object sitePackagesPath = py::str(executablePath.attr("parents")[1]) + "/lib/python" + py::str(versionInfo.attr("major")) + "." + py::str(versionInfo.attr("minor")) + "/site-packages";
+
+
+        std::cout << "Inferred site-packages path is " << py::extract<std::string>(py::str(sitePackagesPath))() << std::endl;
+
+        pythonpath.attr("insert")(0, py::extract<std::string>(py::str(sitePackagesPath))());
+
+        py::object test = py::import("test");
+        py::object res = test.attr("main")();
+        std::cout <<  py::extract<std::string>(res)() << std::endl;
+
+    } catch (const py::error_already_set&) {
+        PyErr_Print();
+        return std::nullopt;
+    }
 
 
     // C API
