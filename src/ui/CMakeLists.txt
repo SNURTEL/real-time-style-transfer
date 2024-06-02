@@ -10,10 +10,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-IF (WIN32)
-    set(CMAKE_PREFIX_PATH "C:/Qt/6.7.0/msvc2019_64")
-ENDIF ()
-
 # [Windows/Bugs] Due to bugs, variable is set directly in CMakeLists
 IF (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.7.0/msvc2019_64")
@@ -21,12 +17,14 @@ ENDIF ()
 
 # [Project/Build] Library
 add_library(ui
-    # application.cpp
-    # main_window.cpp
-    resources.qrc
+        application.cpp
+        main_window.cpp
+        pages/image_page.cpp
+        pages/camera_page.cpp
+        resources.qrc
 )
-target_include_directories(ui 
-    PUBLIC 
+target_include_directories(ui
+        PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )
 
