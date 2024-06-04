@@ -6,6 +6,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <vector>
 
 namespace modelManager {
 enum PretrainedModel {
