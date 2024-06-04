@@ -16,30 +16,30 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char **argv) {
-    std::cout << "Current path is " << fs::current_path() << '\n';
-
-    auto aaa = modelManager::PretrainedModel::style_vangogh;
-    assert(aaa == modelManager::PretrainedModel::style_vangogh);
-
-    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
-
-    const std::string MODEL_FILE = "models/style_vangogh.ts";
-
-    auto _model = Model::fromFile(MODEL_FILE);
-    if (!_model) {
-        std::cout << "Cannot load model. Check if " << MODEL_FILE << "  exists."
-                  << std::endl;
-        return -1;
-    }
-
-    Model &model = _model.value();
-
-    auto cam = Camera::build();
-
-    if (!cam) {
-        std::cerr << "Failed to initialize camera" << std::endl;
-        return -1;
-    }
+//    std::cout << "Current path is " << fs::current_path() << '\n';
+//
+//    auto aaa = modelManager::PretrainedModel::style_vangogh;
+//    assert(aaa == modelManager::PretrainedModel::style_vangogh);
+//
+//    auto bbb = modelManager::downloadModel(modelManager::PretrainedModel::style_cezanne);
+//
+//    const std::string MODEL_FILE = "models/style_vangogh.ts";
+//
+//    auto _model = Model::fromFile(MODEL_FILE);
+//    if (!_model) {
+//        std::cout << "Cannot load model. Check if " << MODEL_FILE << "  exists."
+//                  << std::endl;
+//        return -1;
+//    }
+//
+//    Model &model = _model.value();
+//
+//    auto cam = Camera::build();
+//
+//    if (!cam) {
+//        std::cerr << "Failed to initialize camera" << std::endl;
+//        return -1;
+//    }
 
 //    for (;;) {
 //        auto frame = cam->nextFrame();

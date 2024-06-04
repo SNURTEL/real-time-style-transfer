@@ -5,6 +5,12 @@
 
 #include "page.hpp"
 
+class QVBoxLayout;
+
+class QLabel;
+
+class QListWidget;
+
 /**
  * @brief Models page
  */
@@ -26,6 +32,11 @@ public:
      * @brief Deactivates page
      */
     void deactivatePage() override;
+
+private:
+    std::shared_ptr<QVBoxLayout> _layout;
+    std::shared_ptr<QLabel> _title;
+    std::shared_ptr<QListWidget> _listWidget;
 };
 
 

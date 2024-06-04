@@ -7,6 +7,9 @@ class Page;
 
 enum class PageIndex;
 
+class QHBoxLayout;
+
+class QListWidget;
 
 /**
  * @brief View for displaying pages

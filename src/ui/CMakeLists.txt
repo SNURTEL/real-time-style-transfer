@@ -24,6 +24,7 @@ add_library(ui
         pages/image_page.cpp
         pages/camera_page.cpp
         pages/models_page.cpp
+        components/model_list_element.cpp
         resources.qrc
 )
 target_include_directories(ui

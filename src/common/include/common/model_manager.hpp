@@ -1,3 +1,6 @@
+#ifndef STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
+#define STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
+
 #include <filesystem>
 #include <map>
 #include <optional>
@@ -12,6 +15,8 @@ enum PretrainedModel {
     style_vangogh
 };
 
+std::vector<modelManager::PretrainedModel> getAllModels();
+
 std::string pretrainedModelToString(PretrainedModel);
 
 std::optional<PretrainedModel> stringToPretrainedModel(std::string);
@@ -24,3 +29,5 @@ std::optional<std::filesystem::path> _getModelPath(PretrainedModel);
 
 std::optional<std::filesystem::path> getOrDownloadModelPath(PretrainedModel);
 } // namespace modelManager
+
+#endif //STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
