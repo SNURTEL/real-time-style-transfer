@@ -37,7 +37,7 @@ target_include_directories(ui
 set_property(TARGET ui PROPERTY CXX_STANDARD 20)
 set_target_properties(ui PROPERTIES AUTOMOC TRUE)
 
-target_link_libraries(ui PRIVATE Qt6::Widgets)
+target_link_libraries(ui PRIVATE Qt6::Widgets Qt6::Core)
 
 target_link_libraries(ui PRIVATE common)
 

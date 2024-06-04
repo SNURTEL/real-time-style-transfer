@@ -16,6 +16,7 @@ set(VCPKG_MANIFEST_MODE ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEFINED_IN_CMAKELISTS")
 
+# [Setup/Qt]
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -55,9 +56,6 @@ ENDIF ()
 # apt does not have QT 6.3, which introduces `qt_standard_project_setup`
 if (Qt6Core_VERSION VERSION_LESS "6.3")
     message( "Qt version lower that 6.3; cannot use qt_standard_project_setup" )
-    set(CMAKE_AUTOMOC ON) 
-    set(CMAKE_AUTORCC ON) 
-    set(CMAKE_AUTOUIC ON)
 else ()
     qt_standard_project_setup()
 endif ()

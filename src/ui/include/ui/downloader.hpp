@@ -7,16 +7,10 @@
 class QThread;
 
 class Downloader : public QObject {
-    Q_OBJECT
-
 public:
     Downloader();
 
     void download(modelManager::PretrainedModel model);
-
-signals:
-
-    void downloadComplete();
 private:
     std::shared_ptr<QThread> _thread;
 };
