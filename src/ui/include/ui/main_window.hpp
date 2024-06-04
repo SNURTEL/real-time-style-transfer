@@ -16,19 +16,22 @@ class View;
 
 enum class PageIndex;
 
+class State;
 
 /**
  * @brief Main application window
  */
 class MainWindow : public QMainWindow {
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr, std::shared_ptr<State> state = nullptr);
 
     /**
      * @brief Setups UI of MainWindow
      */
     void setupUi();
 private:
+    std::shared_ptr<State> _state;
+
     std::shared_ptr<QAction> _imageInferenceAction;
     std::shared_ptr<QAction> _cameraInferenceAction;
     std::shared_ptr<QAction> _modelsAction;

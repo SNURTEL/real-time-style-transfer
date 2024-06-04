@@ -1,8 +1,9 @@
 #include <iostream>
 
 #include "ui/pages/camera_page.hpp"
+#include "ui/state.hpp"
 
-CameraPage::CameraPage(QWidget *parent) : Page(parent) {
+CameraPage::CameraPage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
     setupUi();
 }
 

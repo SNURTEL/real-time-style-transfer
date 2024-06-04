@@ -5,12 +5,14 @@
 
 #include "page.hpp"
 
+class State;
+
 /**
  * @brief Camera inference page
  */
 class CameraPage : public Page {
 public:
-    explicit CameraPage(QWidget *parent);
+    explicit CameraPage(QWidget *parent, std::shared_ptr<State> state);
 
     /**
      * @brief Setups UI for Camera Page

@@ -5,6 +5,8 @@
 
 class MainWindow;
 
+class State;
+
 
 /**
  * @brief Main Qt application class
@@ -17,7 +19,12 @@ private:
     /**
      * @brief Main Window
      */
-    std::shared_ptr<MainWindow> mainWindow;
+    std::shared_ptr<MainWindow> _mainWindow;
+
+    /**
+     * @brief State of application
+     */
+    std::shared_ptr<State> _state;
 };
 
 

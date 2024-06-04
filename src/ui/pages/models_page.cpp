@@ -11,8 +11,9 @@
 #include "common/model_manager.hpp"
 #include "ui/pages/models_page.hpp"
 #include "ui/components/model_list_element.hpp"
+#include "ui/state.hpp"
 
-ModelsPage::ModelsPage(QWidget *parent) : Page(parent) {
+ModelsPage::ModelsPage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
     setupUi();
 }
 

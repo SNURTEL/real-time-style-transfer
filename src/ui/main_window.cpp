@@ -9,9 +9,11 @@
 #include "ui/pages/camera_page.hpp"
 #include "ui/pages/image_page.hpp"
 #include "ui/pages/models_page.hpp"
+#include "ui/state.hpp"
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+MainWindow::MainWindow(QWidget *parent, std::shared_ptr<State> state) : QMainWindow(parent) {
+    _state = state;
     setupUi();
 }
 
@@ -79,9 +81,9 @@ void MainWindow::setupUi() {
 
     // region Add view to central layout
     _view = std::make_shared<View>(this);
-    _view->addPage(PageIndex::ImageInference, std::make_shared<ImagePage>(_view.get()), _imageInferenceAction);
-    _view->addPage(PageIndex::CameraInference, std::make_shared<CameraPage>(_view.get()), _cameraInferenceAction);
-    _view->addPage(PageIndex::Models, std::make_shared<ModelsPage>(_view.get()), _modelsAction);
+    _view->addPage(PageIndex::ImageInference, std::make_shared<ImagePage>(_view.get(), _state), _imageInferenceAction);
+    _view->addPage(PageIndex::CameraInference, std::make_shared<CameraPage>(_view.get(), _state), _cameraInferenceAction);
+    _view->addPage(PageIndex::Models, std::make_shared<ModelsPage>(_view.get(), _state), _modelsAction);
     _centralLayout->addWidget(_view.get());
     // endregion
 

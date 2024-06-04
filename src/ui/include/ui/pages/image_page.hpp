@@ -7,12 +7,14 @@
 
 class QPushButton;
 
+class State;
+
 /**
  * @brief Image inference page
  */
 class ImagePage : public Page {
 public:
-    explicit ImagePage(QWidget *parent);
+    explicit ImagePage(QWidget *parent, std::shared_ptr<State> state);
 
     /**
      * @brief Setups UI for Camera Page

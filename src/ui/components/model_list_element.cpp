@@ -19,6 +19,7 @@ void ModelListElement::setupUi() {
     _name = std::make_shared<QLabel>(this);
     _status = std::make_shared<QLabel>(this);
     _button = std::make_shared<QPushButton>(this);
+    _button->setDisabled(true);
 
     _layout->addWidget(_name.get());
     _layout->addWidget(_status.get());
@@ -37,11 +38,10 @@ void ModelListElement::update() {
     if (downloadedModels->contains(_model)) {
         _status->setText(QString::fromUtf8("Downloaded"));
         _status->setStyleSheet("QLabel { color : #78e08f; }");
+        _button->setText(QString::fromUtf8("Activate"));
     }
     else {
         _status->setText(QString::fromUtf8("Not downloaded"));
         _status->setStyleSheet("QLabel { color : #e55039; }");
     }
-
-
 }

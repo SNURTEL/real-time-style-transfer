@@ -11,12 +11,14 @@ class QLabel;
 
 class QListWidget;
 
+class State;
+
 /**
  * @brief Models page
  */
 class ModelsPage : public Page {
 public:
-    explicit ModelsPage(QWidget *parent);
+    explicit ModelsPage(QWidget *parent, std::shared_ptr<State> state);
 
     /**
      * @brief Setups UI for Camera Page

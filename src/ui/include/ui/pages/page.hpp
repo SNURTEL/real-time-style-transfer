@@ -3,12 +3,14 @@
 
 #include <QWidget>
 
+class State;
+
 /**
  * @brief Base Page class
  */
 class Page : public QWidget {
 public:
-    Page(QWidget *parent) : QWidget(parent) {}
+    explicit Page(QWidget *parent, std::shared_ptr<State> state);
 
     /**
      * @brief Activates page
@@ -28,6 +30,7 @@ public:
 
 private:
     bool _active{false};
+    std::shared_ptr<State> _state;
 };
 
 #endif //STYLE_APPLICATION_UI_PAGES_PAGE_HPP

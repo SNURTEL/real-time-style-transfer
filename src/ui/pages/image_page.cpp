@@ -3,8 +3,9 @@
 #include <QPushButton>
 
 #include "ui/pages/image_page.hpp"
+#include "ui/state.hpp"
 
-ImagePage::ImagePage(QWidget *parent) : Page(parent) {
+ImagePage::ImagePage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
     setupUi();
 }
 
