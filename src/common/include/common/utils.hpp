@@ -1,6 +1,11 @@
-#include <opencv2/core.hpp>
-#include <torch/script.h>
+#ifndef __UTILS_H__
+#define __UTILS_H__
 
+#include <opencv2/core.hpp>
+
+#undef slots
+#include <torch/script.h>
+#define slots Q_SLOTS
 /**
  * @brief Convert a cv2 image of shape [x, y, channels] to a Torch tensor of
  * shape [1, channels, x, y] and type torch::kByte.
@@ -20,3 +25,4 @@ at::Tensor cv2ToTensor(const cv::Mat &image, bool copy = false);
  * @return cv::Mat Tensor converted to image
  */
 cv::Mat tensorToCv2(const at::Tensor &tensor, bool copy = false);
+#endif // __UTILS_H__

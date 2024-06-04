@@ -3,7 +3,9 @@
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
+#undef slots
 #include <torch/script.h>
+#define slots Q_SLOTS
 
 namespace image {
 /**

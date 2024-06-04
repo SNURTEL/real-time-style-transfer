@@ -2,7 +2,9 @@
 #define STYLE_APPLICATION_COMMON_MODEL_HPP
 
 #include <string>
+#undef slots
 #include <torch/script.h>
+#define slots Q_SLOTS
 
 /**
  * @brief Wrapper around a Torch module

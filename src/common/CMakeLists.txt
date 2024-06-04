@@ -7,6 +7,7 @@ add_library(common
     model.cpp
     camera.cpp
     utils.cpp
+        image.cpp
     model_manager.cpp
 )
 set_property(TARGET common PROPERTY CXX_STANDARD 20)
