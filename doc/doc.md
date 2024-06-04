@@ -56,7 +56,9 @@ Do poprawnej kompilacji projektu wymagane jest spełnienie następujących zale�
 - Biblioteka Qt (testowano na 6.7)
 - (zalecane) CUDA 12.1
 - (Unix) biblioteka `libfmt-dev` - wymaganie ze strony OpenCV
-- (do przygotowań własnych modrli) środowisko języka Python (≥3.10) ze spełnionymi zależnościami z pliku `scripts/requirements.txt`
+- (do pobierania modeli) `curl`
+- (do przygotowań własnych modeli) środowisko języka Python (≥3.10) ze spełnionymi zależnościami z pliku `scripts/requirements.txt`
+- (budowanie dokumentacji) Doxygen
 
 ### Kompilacja projektu 
 
@@ -71,7 +73,7 @@ W pliku `CMakePresets.json` dostarczono dwie konfiguracje budowania dla systemó
 Podczas przygotowywania projektu system `CMake` pobierze bibliotekę `Catch2` oraz wygeneruje pliki potrzebne do kompilacji. Jeśli wystąpię problem ze znalezieniem którejś z bibliotek, można jawnie wskazać jej ścieżkę za pomocą odpowiedniej zmiennej środowiskowej:
 
 - CUDA - `CUDACXX=/path/to/cuda/nvcc`
-- Libtorch - `Torch_DIR`
+- LibTorch - `Torch_DIR`
 - OpenCV - `OpenCV_DIR`
 
 W przypadku problemu ze znalezieniem biblioteki Qt, wskazane jest dodatnie parametru `-DCMAKE_PREFIX_PATH=/path/to/qt` zamiast ustawiania zmiennej środowiskowej `Qt_DIR` - może ona powodować problemu ze znalezieniem niektórych komponentów.
@@ -82,13 +84,27 @@ Kompilacja projektu:
 cmake --build src/build/<PRESET-NAME>
 ```
 
-Plik binarny zostanie umieszczony w podkatalogu `src/build/<PRESET-NAME>/bin/app`. Uruchomienie aplikacji:
+Plik binarny zostanie umieszczony w podkatalogu `src/build/<PRESET-NAME>/app`. Uruchomienie aplikacji:
 
 ```shell
-./src/build/<PRESET_NAME>/bin/app
+./src/build/<PRESET_NAME>/app
 ```
 
 Modele w formacie TorchScript wyszukiwane są w podkatalogu `models` zlokalizowanym w obecnym katalogu roboczym. Jeśli taki nie istnieje, zostanie on utworzony podczas pobierania pierwszego z modeli.
+
+Uruchomienie testów (po wcześniejszej kompilacji):
+
+```shell
+cd src
+ctest --preset test-unix-gcc
+```
+
+#### Budowanie dokumentacji kodu
+
+```shell
+doxygen Doxyfile
+firefox doc/generated/html/index.html
+```
 
 #### Kompilacja w systemie Windows
 
@@ -97,8 +113,6 @@ TODO
 ### Instrukcja użytkowania 
 
 TODO
-
-
 
 ### Dostępne modele
 
@@ -109,7 +123,7 @@ Program wykorzystuje modele CycleGAN [publikacja](https://arxiv.org/abs/1703.105
 - `style_ukiyoe`
 - `style_vangogh`
 
-Alternatywne, możliwe są manualne pobranie i konwersja modelu do formatu TorchScript. Należy w tym celu przygotować środowisko Pythona ze spełnionymi zależnościami z pliku `requirements.txt` i skorzystać ze skryptu załączonego w repozytorium:
+Alternatywne, możliwe jest manualne pobranie i konwersja modelu do formatu TorchScript. Należy w tym celu przygotować środowisko Pythona ze spełnionymi zależnościami z pliku `requirements.txt` i skorzystać ze skryptu załączonego w repozytorium:
 
 ```shell
 python3 -m pip install -r scripts/requirements.txt
@@ -128,13 +142,6 @@ W repozytorium zawarto również skrypty pozwalające wywołać lintery i format
 ./utils/lint-cppcheck.sh
 ```
 
-Uruchomienie testów (po wcześniejszej kompilacji):
-
-```shell
-cd src
-ctest --preset test-unix-gcc
-```
-
 Wszystkie wymienione narzędzia uruchamiane są w potokach CI i brak zgłoszonych przez nie błędów jest warunkiem wykonania `merge` do gałęzi głównej.
 
 ### Problemy napotkane podczas realizacji projektu
@@ -143,9 +150,9 @@ Wszystkie wymienione narzędzia uruchamiane są w potokach CI i brak zgłoszonyc
     - `nix` 
         - Główny problem - błędy w udostępnianych pakietach
     - `vcpkg`
-        - Wymaga kompilacji zależności ze źródeł - wyjątkowo czasochłonne, konieczne jest instalowanie wielu dodatkowych biliotek (trudnych do przewidzenia) i nie ma gwarancji zakończenia się sukcesem
+        - Wymaga kompilacji zależności ze źródeł - wyjątkowo czasochłonne, konieczne jest instalowanie wielu dodatkowych bibliotek (trudnych do przewidzenia) i nie ma gwarancji zakończenia się sukcesem. Pliki konfiguracyjne `vcpkg` zostały pozostawione w repozytorium, ale nie zaleca się korzystania z nich
     - `FetchContent_Declare` w CMake
-        - Uciążliwe przy próbie wykoanania "czystej" kompilacji, ostatniecznie wykorzystany tylko do `Catch2`
-- Komatybilność z systemem Windows - konieczność niezleżnego testowanie tej samej konfiguracji w dwóch środowiskach
+        - Uciążliwe przy próbie wykonania "czystej" kompilacji, ostatecznie wykorzystany tylko do `Catch2`
+- Kompatybilność z systemem Windows - konieczność niezależnego testowanie tej samej konfiguracji w dwóch środowiskach
 - Pośrednia zależność od kodu Pythona - autorzy publikacji dostarczają jedynie wagi do modeli, same modele zaimplementowane są jednak w Pythonie i wymagają konwersji do formatu TorchScript. Pierwotnie zakładano, że sama konwersja będzie odbywała przez wywołanie osadzonego kodu Pythona, ostatecznie zrezygnowano z tego rozwiązania na rzecz wstępnego przygotowania modeli - upraszcza to aplikację i eliminuje niepotrzebne konwertowanie modeli za każdym razem ten sam sposób
 - Niska dostępność maszyn z systemem Windows w usłudze GitHub Actions - konieczność manualnego testowania
