@@ -3,6 +3,7 @@
 
 #include <optional>
 
+#include "common/model.hpp"
 #include "common/model_manager.hpp"
 
 class Downloader;
@@ -31,9 +32,21 @@ public:
      */
     std::shared_ptr<Downloader> getDownloader();
 
+    /**
+     * @brief Loads model
+     */
+    void ensureModelLoaded();
+
+    /**
+     * @brief
+     */
+    void useModel();
+
 private:
+    bool _loaded;
     std::optional<modelManager::PretrainedModel> _activeModel;
     std::shared_ptr<Downloader> _downloader;
+    std::shared_ptr<Model> _model;
 };
 
 

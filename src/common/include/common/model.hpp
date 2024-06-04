@@ -1,3 +1,6 @@
+#ifndef STYLE_APPLICATION_COMMON_MODEL_HPP
+#define STYLE_APPLICATION_COMMON_MODEL_HPP
+
 #include <string>
 #include <torch/script.h>
 
@@ -28,3 +31,5 @@ class Model {
     explicit Model(const torch::jit::Module &module);
     Model();
 };
+
+#endif //STYLE_APPLICATION_COMMON_MODEL_HPP
