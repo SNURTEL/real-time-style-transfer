@@ -123,7 +123,7 @@ Program wykorzystuje modele CycleGAN [publikacja](https://arxiv.org/abs/1703.105
 - `style_ukiyoe`
 - `style_vangogh`
 
-Alternatywne, możliwe jest manualne pobranie i konwersja modelu do formatu TorchScript. Należy w tym celu przygotować środowisko Pythona ze spełnionymi zależnościami z pliku `requirements.txt` i skorzystać ze skryptu załączonego w repozytorium:
+Alternatywne, możliwe jest manualne pobranie i konwersja modelu do formatu TorchScript. Należy w tym celu przygotować środowisko Pythona ze spełnionymi zależnościami z pliku `scripts/requirements.txt` i skorzystać ze skryptu załączonego w repozytorium:
 
 ```shell
 python3 -m pip install -r scripts/requirements.txt
