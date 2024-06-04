@@ -1,4 +1,5 @@
 #include "ui/state.hpp"
+#include "common/model.hpp"
 #include "ui/downloader.hpp"
 
 State::State() {
@@ -40,7 +41,7 @@ void State::ensureModelLoaded() {
         return;
     }
 
-    _model = std::make_shared(model.value());
+    _model = std::make_shared<Model>(std::move(model.value()));
 }
 
 void State::useModel() {
