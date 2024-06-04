@@ -37,7 +37,7 @@ void ModelsPage::setupUi() {
 
     for (const modelManager::PretrainedModel& model : modelManager::getAllModels()) {
         auto *item = new QListWidgetItem(_listWidget.get());
-        auto *widget = new ModelListElement(_listWidget.get(), model);
+        auto *widget = new ModelListElement(_listWidget.get(), model, _state);
         item->setSizeHint(widget->sizeHint());
         _listWidget->setItemWidget(item, widget);
     }
@@ -47,10 +47,15 @@ void ModelsPage::setupUi() {
 
 void ModelsPage::activatePage() {
     Page::activatePage();
-    std::cout << "Activate models";
+
+    for (int i = 0; i < _listWidget->count(); ++i) {
+        QListWidgetItem *item = _listWidget->item(i);
+        auto *widget = dynamic_cast<ModelListElement*>(_listWidget->itemWidget(item));
+        widget->updateState();
+        widget->updateUi();
+    }
 }
 
 void ModelsPage::deactivatePage() {
     Page::deactivatePage();
-    std::cout << "Deactivate models";
 }

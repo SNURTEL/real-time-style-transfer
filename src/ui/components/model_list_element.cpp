@@ -6,11 +6,15 @@
 
 #include "ui/components/model_list_element.hpp"
 #include "common/model_manager.hpp"
+#include "ui/state.hpp"
 
-ModelListElement::ModelListElement(QWidget *parent, modelManager::PretrainedModel model) : QWidget(parent) {
+ModelListElement::ModelListElement(QWidget *parent, modelManager::PretrainedModel model, std::shared_ptr<State> state) : QWidget(parent) {
     _model = model;
+    _state = std::move(state);
+    _innerState = ModelListElementState::Unknown;
     setupUi();
-    update();
+    updateState();
+    updateUi();
 }
 
 void ModelListElement::setupUi() {
@@ -20,6 +24,7 @@ void ModelListElement::setupUi() {
     _status = std::make_shared<QLabel>(this);
     _button = std::make_shared<QPushButton>(this);
     _button->setDisabled(true);
+    connect(_button.get(), &QPushButton::clicked, this, &ModelListElement::onButtonClicked);
 
     _layout->addWidget(_name.get());
     _layout->addWidget(_status.get());
@@ -28,20 +33,70 @@ void ModelListElement::setupUi() {
     this->setLayout(_layout.get());
 }
 
-void ModelListElement::update() {
+void ModelListElement::updateState() {
+    auto downloadedModels = modelManager::getDownloadedModels();
+    if (downloadedModels->contains(_model)) {
+        if (_state->getActiveModel() == _model) {
+            _innerState = ModelListElementState::Active;
+        }
+        else {
+            _innerState = ModelListElementState::Downloaded;
+        }
+    }
+    else {
+        _innerState = ModelListElementState::NotDownloaded;
+    }
+}
+
+void ModelListElement::updateUi() {
     std::string modelName = modelManager::pretrainedModelToString(_model);
     _name->setText(QString::fromUtf8(modelName.c_str()));
 
-    _button->setText("Unknown");
+    switch (_innerState) {
+        case ModelListElementState::NotDownloaded:
+            _status->setText(QString::fromUtf8("Not downloaded"));
+            _status->setStyleSheet("QLabel { color : #e55039; }");
+            _button->setDisabled(false);
+            _button->setText(QString::fromUtf8("Download"));
+            break;
+        case ModelListElementState::Downloading:
+            _status->setText(QString::fromUtf8("Downloading"));
+            _status->setStyleSheet("QLabel { color : #4a69bd; }");
+            _button->setDisabled(true);
+            break;
+        case ModelListElementState::Downloaded:
+            _status->setText(QString::fromUtf8("Downloaded"));
+            _status->setStyleSheet("QLabel { color : #4a69bd; }");
+            _button->setDisabled(false);
+            _button->setText(QString::fromUtf8("Activate"));
+            break;
+        case ModelListElementState::Active:
+            _status->setText(QString::fromUtf8("Active"));
+            _status->setStyleSheet("QLabel { color : #78e08f; }");
+            _button->setDisabled(true);
+            _button->setText(QString::fromUtf8("Active"));
+            break;
+        case ModelListElementState::Unknown:
+            _status->setText(QString::fromUtf8("Unknown"));
+            _status->setStyleSheet("QLabel { color : #e55039; }");
+            _button->setDisabled(true);
+            _button->setText(QString::fromUtf8("Unknown"));
+            break;
+    }
+}
 
-    auto downloadedModels = modelManager::getDownloadedModels();
-    if (downloadedModels->contains(_model)) {
-        _status->setText(QString::fromUtf8("Downloaded"));
-        _status->setStyleSheet("QLabel { color : #78e08f; }");
-        _button->setText(QString::fromUtf8("Activate"));
+void ModelListElement::onButtonClicked() {
+    switch (_innerState) {
+        case ModelListElementState::NotDownloaded:
+            // @TODO: Start downloading
+            break;
+        case ModelListElementState::Downloaded:
+            _state->setActiveModel(_model);
+            break;
+        default:
+            break;
     }
-    else {
-        _status->setText(QString::fromUtf8("Not downloaded"));
-        _status->setStyleSheet("QLabel { color : #e55039; }");
-    }
+
+    updateState();
+    updateUi();
 }

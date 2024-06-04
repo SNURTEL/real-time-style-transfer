@@ -30,6 +30,7 @@ public:
 
 private:
     bool _active{false};
+protected:
     std::shared_ptr<State> _state;
 };
 
