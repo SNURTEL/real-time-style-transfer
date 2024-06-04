@@ -7,15 +7,26 @@
 
 class QPushButton;
 
-
+/**
+ * @brief Image inference page
+ */
 class ImagePage : public Page {
 public:
     explicit ImagePage(QWidget *parent);
 
+    /**
+     * @brief Setups UI for Camera Page
+     */
     void setupUi();
 
+    /**
+     * @brief Activates page
+     */
     void activatePage() override;
 
+    /**
+     * @brief Deactivates page
+     */
     void deactivatePage() override;
 
 private:

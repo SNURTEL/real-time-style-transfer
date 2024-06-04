@@ -24,6 +24,9 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+    /**
+     * @brief Setups UI of MainWindow
+     */
     void setupUi();
 private:
     std::shared_ptr<QAction> _imageInferenceAction;
