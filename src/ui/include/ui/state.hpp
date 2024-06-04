@@ -35,12 +35,12 @@ public:
     /**
      * @brief Loads model
      */
-    void ensureModelLoaded();
+    bool ensureModelLoaded();
 
     /**
-     * @brief
+     * @brief Get model
      */
-    void useModel();
+    std::shared_ptr<Model> getModel();
 
 private:
     bool _loaded;

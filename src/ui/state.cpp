@@ -1,6 +1,7 @@
 #include "ui/state.hpp"
 #include "common/model.hpp"
 #include "ui/downloader.hpp"
+#include <QWidget>
 
 State::State() {
     _loaded = false;
@@ -21,29 +22,37 @@ std::shared_ptr<Downloader> State::getDownloader() {
     return _downloader;
 }
 
-void State::ensureModelLoaded() {
+bool State::ensureModelLoaded() {
     if (_loaded) {
-        return;
+        return false;
     }
 
     if (!_activeModel) {
-        return;
+        return false;
     }
 
     _loaded = true;
     std::optional<std::filesystem::path> modelPath = modelManager::getOrDownloadModelPath(_activeModel.value());
     if (!modelPath) {
-        return;
+        return false;
     }
 
     auto model = Model::fromFile(modelPath.value().string());
     if (!model) {
-        return;
+        qDebug() << "Issues with model";
+        return false;
     }
+    qDebug() << "Model loaded";
 
     _model = std::make_shared<Model>(std::move(model.value()));
+    qDebug() << "As pointer now";
+    return true;
 }
 
-void State::useModel() {
-    ensureModelLoaded();
+std::shared_ptr<Model> State::getModel() {
+    if (!ensureModelLoaded()) {
+        throw std::runtime_error("Cannot get model");
+    }
+
+    return _model;
 }

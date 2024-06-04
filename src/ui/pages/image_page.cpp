@@ -13,6 +13,7 @@
 #include "ui/state.hpp"
 #include "common/image.hpp"
 #include "common/utils.hpp"
+#include "common/model.hpp"
 
 ImagePage::ImagePage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
     setupUi();
@@ -109,15 +110,34 @@ void ImagePage::onTransformButtonClicked() {
         updateUi();
     }
 
-    auto material = image::loadImage(_inputImagePath.value());
-    if (!material) {
+    // Load to Cv2 mat
+    auto mat = image::loadImage(_inputImagePath.value());
+    if (!mat) {
         _inputImagePath = std::nullopt;
         updateUi();
     }
-    auto tensor = cv2ToTensor(material.value());
 
+    // Convert to tensor
+    auto tensor = cv2ToTensor(mat.value());
+    qDebug() << "Converted to tensor";
 
-    return;
+    // Get model and forward the tensor
+    std::shared_ptr<Model> model = _state->getModel();
+    qDebug() << "Model ready";
+    auto result = model->forward(tensor);
+    qDebug() << "Result is here";
+
+    // Convert result tensor to Cv2 Mat
+    auto resultMat = tensorToCv2(result);
+    qDebug() << "Back to cv2";
+
+    // Convert Cv2 Mat to QImage, then to QPixmap
+    QImage img((uchar*)resultMat.data, resultMat.cols, resultMat.rows, QImage::Format_RGB32);
+    qDebug() << "QImage now";
+    QPixmap pixmap = QPixmap::fromImage(img);
+    qDebug() << "Nearly finished";
+    // Display
+    _outputImage->setPixmap(pixmap);
 }
 
 
