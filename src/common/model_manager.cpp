@@ -70,10 +70,32 @@ modelManager::getDownloadedModels() {
     return std::make_optional(availableModels);
 }
 
+std::map<modelManager::PretrainedModel, std::string> _modelToUrl{
+    {modelManager::PretrainedModel::style_cezanne,
+     "https://docs.google.com/"
+     "uc?export=download&id=1-x6kLQ3AxcgQCHQ9_HxDajizQM9klUBK"},
+    {modelManager::PretrainedModel::style_monet,
+     "https://docs.google.com/"
+     "uc?export=download&id=12l7SQAvWpc3ZHaee46PeUv75_Z7SbzF-"},
+    {modelManager::PretrainedModel::style_ukiyoe,
+     "https://docs.google.com/"
+     "uc?export=download&id=1MkSuU4Zk4fbdatM454svadpeP9vmb9CY"},
+    {modelManager::PretrainedModel::style_vangogh,
+     "https://docs.google.com/"
+     "uc?export=download&id=1fZIkD0St9AJ2MvoWU_aMXleaOpHcPvR5"},
+};
+
 std::optional<std::filesystem::path>
 modelManager::_downloadModel(modelManager::PretrainedModel model) {
-    std::string command = "python scripts/create_cyclegan_pretrained.py " +
-                          modelManager::pretrainedModelToString(model);
+    if (!fs::is_directory("models") || !fs::exists("models")) {
+        fs::create_directory("models");
+    }
+
+    std::string url = _modelToUrl[model];
+
+    std::string command = "curl -L \"" + url + "\" -o models/" +
+                          modelManager::pretrainedModelToString(model) + ".ts";
+    std::cout << command << std::endl;
     auto returnCode = system(command.c_str());
 
     if (returnCode) {
