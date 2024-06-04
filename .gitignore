@@ -594,3 +594,6 @@ saved_image.png
 doc/generated
 
 models
+
+venv
+.venv

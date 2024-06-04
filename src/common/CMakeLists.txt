@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.25)
 
 project(common)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
 
 add_library(common
     model.cpp
@@ -18,4 +17,3 @@ target_include_directories(common
 
 target_link_libraries(common PRIVATE "${TORCH_LIBRARIES}")
 target_link_libraries(common PRIVATE ${OpenCV_LIBS})
-target_link_libraries(common PRIVATE Python::Python ${PYTHON_LIBRARIES})
