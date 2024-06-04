@@ -96,11 +96,10 @@ modelManager::_downloadModel(modelManager::PretrainedModel model) {
 std::optional<std::filesystem::path>
 modelManager::_getModelPath(modelManager::PretrainedModel model) {
     fs::path modelPath =
-        "models/" + modelManager::pretrainedModelToString(model) + ".ts";
+        "models/" + modelManager::pretrainedModelToString(model) + ".pt";
     if (!fs::exists(modelPath)) {
         return std::nullopt;
     }
-
     return modelPath;
 }
 
