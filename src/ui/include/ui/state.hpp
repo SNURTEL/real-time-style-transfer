@@ -5,6 +5,8 @@
 
 #include "common/model_manager.hpp"
 
+class Downloader;
+
 /**
  * @brief State of application
  */
@@ -24,8 +26,14 @@ public:
      */
     void setActiveModel(modelManager::PretrainedModel model);
 
+    /**
+     * @brief Get downloader
+     */
+    std::shared_ptr<Downloader> getDownloader();
+
 private:
     std::optional<modelManager::PretrainedModel> _activeModel;
+    std::shared_ptr<Downloader> _downloader;
 };
 
 

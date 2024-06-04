@@ -21,6 +21,7 @@ add_library(ui
         main_window.cpp
         view.cpp
         state.cpp
+        downloader.cpp
         pages/page.cpp
         pages/image_page.cpp
         pages/camera_page.cpp
@@ -34,6 +35,7 @@ target_include_directories(ui
 )
 
 set_property(TARGET ui PROPERTY CXX_STANDARD 20)
+set_target_properties(ui PROPERTIES AUTOMOC TRUE)
 
 target_link_libraries(ui PRIVATE Qt6::Widgets)
 

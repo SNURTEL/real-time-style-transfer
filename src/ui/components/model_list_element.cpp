@@ -3,10 +3,12 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QPixmap>
 
 #include "ui/components/model_list_element.hpp"
 #include "common/model_manager.hpp"
 #include "ui/state.hpp"
+#include "ui/downloader.hpp"
 
 ModelListElement::ModelListElement(QWidget *parent, modelManager::PretrainedModel model, std::shared_ptr<State> state) : QWidget(parent) {
     _model = model;
@@ -23,11 +25,18 @@ void ModelListElement::setupUi() {
     _name = std::make_shared<QLabel>(this);
     _status = std::make_shared<QLabel>(this);
     _button = std::make_shared<QPushButton>(this);
+    _spinner = std::make_shared<QLabel>(this);
+
     _button->setDisabled(true);
     connect(_button.get(), &QPushButton::clicked, this, &ModelListElement::onButtonClicked);
 
+    QPixmap pixmap("resources/loading.png");
+    QPixmap resized = pixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    _spinner->setPixmap(resized);
+
     _layout->addWidget(_name.get());
     _layout->addWidget(_status.get());
+    _layout->addWidget(_spinner.get());
     _layout->addWidget(_button.get());
 
     this->setLayout(_layout.get());
@@ -52,6 +61,8 @@ void ModelListElement::updateUi() {
     std::string modelName = modelManager::pretrainedModelToString(_model);
     _name->setText(QString::fromUtf8(modelName.c_str()));
 
+    _spinner->setVisible(false);
+
     switch (_innerState) {
         case ModelListElementState::NotDownloaded:
             _status->setText(QString::fromUtf8("Not downloaded"));
@@ -63,6 +74,7 @@ void ModelListElement::updateUi() {
             _status->setText(QString::fromUtf8("Downloading"));
             _status->setStyleSheet("QLabel { color : #4a69bd; }");
             _button->setDisabled(true);
+            _spinner->setVisible(true);
             break;
         case ModelListElementState::Downloaded:
             _status->setText(QString::fromUtf8("Downloaded"));
@@ -88,7 +100,8 @@ void ModelListElement::updateUi() {
 void ModelListElement::onButtonClicked() {
     switch (_innerState) {
         case ModelListElementState::NotDownloaded:
-            // @TODO: Start downloading
+            _innerState = ModelListElementState::Downloading;
+            connect(_state->getDownloader().get(), &Downloader::downloadComplete, this, &ModelListElement::onDownloadComplete);
             break;
         case ModelListElementState::Downloaded:
             _state->setActiveModel(_model);
@@ -96,6 +109,13 @@ void ModelListElement::onButtonClicked() {
         default:
             break;
     }
+
+    updateState();
+    updateUi();
+}
+
+void ModelListElement::onDownloadComplete() {
+    _innerState = ModelListElementState::Downloaded;
 
     updateState();
     updateUi();

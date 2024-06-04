@@ -51,9 +51,11 @@ private:
     std::shared_ptr<QLabel> _name;
     std::shared_ptr<QLabel> _status;
     std::shared_ptr<QPushButton> _button;
+    std::shared_ptr<QLabel> _spinner;
 private slots:
 
     void onButtonClicked();
+    void onDownloadComplete();
 };
 
 
