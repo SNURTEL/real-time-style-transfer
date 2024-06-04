@@ -18,6 +18,7 @@ Celem projektu była implementacja aplikacji w języku C++ pozwalającej na real
 - Biblioteka PyTorch dla języka C++ - `LibTorch`
 - Pobieranie i przygotowywanie modeli - `python3` + `pytorch`
 - Przetwarzanie obrazów - OpenCV
+- Interfejs graficzny - Qt
 - Przyspieszenie sprzętowe - CUDA
 - Kompilatory - `g++`, `clang`, `MVSC`
 - System budowania - CMake + Ninja
@@ -51,7 +52,8 @@ Do poprawnej kompilacji projektu wymagane jest spełnienie następujących zale�
 - Kompilator C++ zgodny z `C++20` (`g++`, `clang` lub `mvsc`)
 - CMake (≥2.25)
 - Biblioteka OpenCV (testowano na wersji 4.5.5)
-- Biblioteka LibTorch (testowani na wetsji 2.2.2)
+- Biblioteka LibTorch (testowano na wetrji 2.2.2)
+- Biblioteka Qt (testowano na 6.7)
 - (zalecane) CUDA 12.1
 - (Unix) biblioteka `libfmt-dev` - wymaganie ze strony OpenCV
 - (do przygotowań własnych modrli) środowisko języka Python (≥3.10) ze spełnionymi zależnościami z pliku `scripts/requirements.txt`
@@ -71,6 +73,8 @@ Podczas przygotowywania projektu system `CMake` pobierze bibliotekę `Catch2` or
 - CUDA - `CUDACXX=/path/to/cuda/nvcc`
 - Libtorch - `Torch_DIR`
 - OpenCV - `OpenCV_DIR`
+
+W przypadku problemu ze znalezieniem biblioteki Qt, wskazane jest dodatnie parametru `-DCMAKE_PREFIX_PATH=/path/to/qt` zamiast ustawiania zmiennej środowiskowej `Qt_DIR` - może ona powodować problemu ze znalezieniem niektórych komponentów.
 
 Kompilacja projektu:
 
