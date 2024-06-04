@@ -2,6 +2,8 @@
 
 Description goes here.
 
+[Full documentation](doc/doc.md)
+
 ## Setup
 
 #### Prerequisites
