@@ -67,9 +67,18 @@ void CameraPage::setupUi() {
 }
 
 void CameraPage::updateUi() {
+    _button->setDisabled(true);
+
     if (CAMERAS > 0) {
-        _title->setText("Camera Inference");
-        _title->setStyleSheet("QLabel { color : #78e08f; }");
+        if (_state->getActiveModel()) {
+            _title->setText("Camera Inference");
+            _title->setStyleSheet("QLabel { color : #78e08f; }");
+            _button->setDisabled(false);
+        }
+        else {
+            _title->setText("Missing active model");
+            _title->setStyleSheet("QLabel { color : #e55039; }");
+        }
     }
     else {
         _title->setText("No camera available");
@@ -79,6 +88,8 @@ void CameraPage::updateUi() {
 
 void CameraPage::activatePage() {
     Page::activatePage();
+
+    updateUi();
 }
 
 void CameraPage::deactivatePage() {
@@ -95,6 +106,7 @@ void CameraPage::onButtonClicked() {
         return;
     }
 
+    _button->setDisabled(true);
     for (;;) {
         auto frame = cam->nextFrame();
         if (!frame) {
@@ -127,4 +139,6 @@ void CameraPage::onButtonClicked() {
             break;
         }
     }
+
+    _button->setDisabled(false);
 }
