@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <iostream>
+#include <istream>
 #include <optional>
 #include <string>
 
@@ -29,6 +30,15 @@ std::optional<Model> Model::fromFile(const std::string &path) {
         return std::make_optional(Model(torch::jit::load(path)));
     } catch (const c10::Error &e) {
         std::cerr << e.what() << "\n";
+        return std::nullopt;
+    }
+
+}
+
+std::optional<Model> Model::fromStream(std::istream &stream) {
+    try {
+        return std::make_optional(Model(torch::jit::load(stream)));
+    } catch (const c10::Error &e) {
         return std::nullopt;
     }
 }

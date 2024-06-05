@@ -1,6 +1,7 @@
 #ifndef STYLE_APPLICATION_COMMON_MODEL_HPP
 #define STYLE_APPLICATION_COMMON_MODEL_HPP
 
+#include <istream>
 #include <string>
 #undef slots
 #include <torch/script.h>
@@ -19,6 +20,8 @@ class Model {
      * @return std::optional<Model> Model or std::nullopt if loading failed
      */
     static std::optional<Model> fromFile(const std::string &path);
+
+    static std::optional<Model> fromStream(std::istream &stream);
 
     /**
      * @brief Feed the tensor through the network
