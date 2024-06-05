@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <opencv2/core.hpp>
 #include <opencv2/core/base.hpp>
+#include <opencv2/core/types.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
@@ -119,16 +120,17 @@ void ImagePage::onTransformButtonClicked() {
     }
 
     // Load to Cv2 mat
-    auto mat = image::loadImage(_inputImagePath.value(), cv::IMREAD_COLOR);
-    if (!mat) {
+    auto _mat = image::loadImage(_inputImagePath.value(), cv::IMREAD_COLOR);
+    if (!_mat) {
         _inputImagePath = std::nullopt;
         updateUi();
     }
+    cv::Mat mat = _mat.value()(cv::Rect(0, 0, _mat.value().size[1] / 2 * 2, _mat.value().size[0] / 2 * 2));
     cv::Mat scaledFrame;
-    int longerEdge = std::max(mat->size[0], mat->size[1]);
-    int vPadding = std::max(0, (longerEdge - mat->size[0]) / 2);
-    int hPadding = std::max(0, (longerEdge - mat->size[1]) / 2);
-    cv::copyMakeBorder(mat.value(), scaledFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
+    int longerEdge = std::max(mat.size[0], mat.size[1]);
+    int vPadding = std::max(0, (longerEdge - mat.size[0]) / 2);
+    int hPadding = std::max(0, (longerEdge - mat.size[1]) / 2);
+    cv::copyMakeBorder(mat, scaledFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
     // cv::Mat square = cv2.copyMakeBorder(src, top, bottom, left, right, borderType)
     // cv::resize(mat.value(), scaledFrame, cv::Size(512, 512), 0, 0,
     //             cv::INTER_LINEAR);
@@ -154,19 +156,25 @@ void ImagePage::onTransformButtonClicked() {
     // Convert result tensor to Cv2 Mat
     auto resultMat = tensorToCv2(denormalized, true);
     qDebug() << "Back to cv2";
-    cv::Mat cropped = resultMat(cv::Rect(hPadding, vPadding, mat->size[1], mat->size[0]));
+    cv::Mat cropped = resultMat(cv::Rect(hPadding, vPadding, mat.size[1], mat.size[0]));
+
     // cv::Mat scaled;
     // cv::resize(resultMat, scaled, cv::Size(1024, 1024), 0, 0, cv::INTER_LINEAR);
 
     // Convert Cv2 Mat to QImage, then to QPixmap
-    // cv::Mat bgra;
-    // cv::cvtColor(scaled, bgra, cv::COLOR_BGR2BGRA);
-    // QImage img(bgra.data, bgra.cols, bgra.rows, QImage::Format_RGB32);
-    // qDebug() << "QImage now";
-    // QPixmap pixmap = QPixmap::fromImage(img);
-    // qDebug() << "Nearly finished";
-    // // Display
-    // _outputImage->setPixmap(pixmap);
+    cv::Mat bgra;
+    cv::cvtColor(cropped, bgra, cv::COLOR_BGR2BGRA);
+    _currImage = bgra.clone();
+    if (!_currImage) {
+        return;
+    }
+    QImage img(_currImage.value().data, _currImage.value().cols, _currImage.value().rows, QImage::Format_RGB32);
+    qDebug() << "QImage now";
+    QPixmap pixmap = QPixmap::fromImage(img);
+    qDebug() << "Nearly finished";
+    // Display
+    _outputImage->setPixmap(pixmap);
+    qDebug() << "Done!";
 
-    cv::imshow("Transferred", cropped.clone());
+    // cv::imshow("Transferred", cropped.clone());
 }
