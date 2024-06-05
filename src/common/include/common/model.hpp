@@ -34,4 +34,4 @@ class Model {
     Model();
 };
 
-#endif //STYLE_APPLICATION_COMMON_MODEL_HPP
+#endif // STYLE_APPLICATION_COMMON_MODEL_HPP

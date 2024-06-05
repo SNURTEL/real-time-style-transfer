@@ -6,10 +6,10 @@
 #include <opencv2/videoio.hpp>
 #include <torch/types.h>
 
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 #include "common/camera.hpp"
 #include "common/utils.hpp"
@@ -18,7 +18,8 @@
 
 #define CAMERAS 1
 
-CameraPage::CameraPage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
+CameraPage::CameraPage(QWidget *parent, std::shared_ptr<State> state)
+    : Page(parent, state) {
     setupUi();
     updateUi();
 }
@@ -44,7 +45,7 @@ void CameraPage::setupUi() {
     // endregion
 
     if (CAMERAS > 0) {
-//        _camera = std::make_shared<QCamera>(QCameraDevice::FrontFace);
+        //        _camera = std::make_shared<QCamera>(QCameraDevice::FrontFace);
         _cameraLeft = std::make_shared<QLabel>(this);
         _cameraRight = std::make_shared<QLabel>(this);
 
@@ -59,7 +60,8 @@ void CameraPage::setupUi() {
     // region Button
     _button = std::make_shared<QPushButton>(this);
     _button->setText(QString::fromUtf8("Run standalone"));
-    connect(_button.get(), &QPushButton::clicked, this, &CameraPage::onButtonClicked);
+    connect(_button.get(), &QPushButton::clicked, this,
+            &CameraPage::onButtonClicked);
     // endregion
 
     this->setLayout(_layout.get());
@@ -92,9 +94,7 @@ void CameraPage::activatePage() {
     updateUi();
 }
 
-void CameraPage::deactivatePage() {
-    Page::deactivatePage();
-}
+void CameraPage::deactivatePage() { Page::deactivatePage(); }
 
 void CameraPage::onButtonClicked() {
     std::shared_ptr<Model> model = _state->getModel();
@@ -113,20 +113,20 @@ void CameraPage::onButtonClicked() {
             std::cerr << "Error getting frame" << std::endl;
             return;
         }
-       cv::Mat scaledFrame;
-       cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
-                  cv::INTER_LINEAR);
-       at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
+        cv::Mat scaledFrame;
+        cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
+                   cv::INTER_LINEAR);
+        at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
 
-       at::Tensor pred = ((model->forward(frameTensor) + 1) * 127.5)
-               .detach()
-               .clamp(0, 255)
-               .to(torch::kU8)
-               .to(torch::kCPU);
-       cv::Mat predCv = tensorToCv2(pred, true);
-       cv::Mat upscaled;
-       cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
-                  cv::INTER_LINEAR);
+        at::Tensor pred = ((model->forward(frameTensor) + 1) * 127.5)
+                              .detach()
+                              .clamp(0, 255)
+                              .to(torch::kU8)
+                              .to(torch::kCPU);
+        cv::Mat predCv = tensorToCv2(pred, true);
+        cv::Mat upscaled;
+        cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
+                   cv::INTER_LINEAR);
 
         cv::imshow("Live", upscaled.clone());
         // cv::imshow("Live", frame.value().clone()); // @temp

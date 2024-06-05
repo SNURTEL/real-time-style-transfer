@@ -4,11 +4,6 @@
 /**
  * @brief Index of the page
  */
-enum class PageIndex {
-    ImageInference,
-    CameraInference,
-    Models,
-    Nothing
-};
+enum class PageIndex { ImageInference, CameraInference, Models, Nothing };
 
-#endif //STYLE_APPLICATION_UI_PAGES_PAGE_INDEX_HPP
+#endif // STYLE_APPLICATION_UI_PAGES_PAGE_INDEX_HPP

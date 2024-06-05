@@ -19,7 +19,7 @@ class State;
  * @brief Image inference page
  */
 class ImagePage : public Page {
-public:
+  public:
     explicit ImagePage(QWidget *parent, std::shared_ptr<State> state);
 
     /**
@@ -42,13 +42,13 @@ public:
      */
     void deactivatePage() override;
 
-private slots:
+  private slots:
 
     void onLoadImageButtonClicked();
 
     void onTransformButtonClicked();
 
-private:
+  private:
     std::shared_ptr<QVBoxLayout> _layout;
     std::shared_ptr<QHBoxLayout> _imagesLayout;
     std::shared_ptr<QHBoxLayout> _controlsLayout;
@@ -60,5 +60,4 @@ private:
     std::optional<std::string> _inputImagePath;
 };
 
-
-#endif //STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP
+#endif // STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP

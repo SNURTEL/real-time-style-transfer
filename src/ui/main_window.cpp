@@ -1,18 +1,18 @@
 #include <QAction>
-#include <QVBoxLayout>
 #include <QToolBar>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include "ui/main_window.hpp"
-#include "ui/view.hpp"
-#include "ui/pages/page_index.hpp"
 #include "ui/pages/camera_page.hpp"
 #include "ui/pages/image_page.hpp"
 #include "ui/pages/models_page.hpp"
+#include "ui/pages/page_index.hpp"
 #include "ui/state.hpp"
+#include "ui/view.hpp"
 
-
-MainWindow::MainWindow(QWidget *parent, std::shared_ptr<State> state) : QMainWindow(parent) {
+MainWindow::MainWindow(QWidget *parent, std::shared_ptr<State> state)
+    : QMainWindow(parent) {
     _state = state;
     setupUi();
 }
@@ -25,12 +25,16 @@ void MainWindow::setupUi() {
     QIcon imageIcon;
     QIcon cameraIcon;
     QIcon modelsIcon;
-    imageIcon.addFile(QString::fromUtf8("resources/image.png"), QSize(), QIcon::Normal, QIcon::Off);
-    cameraIcon.addFile(QString::fromUtf8("resources/camera.png"), QSize(), QIcon::Normal, QIcon::Off);
-    modelsIcon.addFile(QString::fromUtf8("resources/models.png"), QSize(), QIcon::Normal, QIcon::Off);
+    imageIcon.addFile(QString::fromUtf8("resources/image.png"), QSize(),
+                      QIcon::Normal, QIcon::Off);
+    cameraIcon.addFile(QString::fromUtf8("resources/camera.png"), QSize(),
+                       QIcon::Normal, QIcon::Off);
+    modelsIcon.addFile(QString::fromUtf8("resources/models.png"), QSize(),
+                       QIcon::Normal, QIcon::Off);
 
     _imageInferenceAction = std::make_shared<QAction>(this);
-    _imageInferenceAction->setObjectName(QString::fromUtf8("ImageInferenceAction"));
+    _imageInferenceAction->setObjectName(
+        QString::fromUtf8("ImageInferenceAction"));
     _imageInferenceAction->setCheckable(true);
     _imageInferenceAction->setChecked(false);
     _imageInferenceAction->setEnabled(true);
@@ -39,7 +43,8 @@ void MainWindow::setupUi() {
     _imageInferenceAction->setToolTip("Switch to image inference");
 
     _cameraInferenceAction = std::make_shared<QAction>(this);
-    _cameraInferenceAction->setObjectName(QString::fromUtf8("CameraInferenceAction"));
+    _cameraInferenceAction->setObjectName(
+        QString::fromUtf8("CameraInferenceAction"));
     _cameraInferenceAction->setCheckable(true);
     _cameraInferenceAction->setChecked(false);
     _cameraInferenceAction->setEnabled(true);
@@ -81,9 +86,15 @@ void MainWindow::setupUi() {
 
     // region Add view to central layout
     _view = std::make_shared<View>(this);
-    _view->addPage(PageIndex::ImageInference, std::make_shared<ImagePage>(_view.get(), _state), _imageInferenceAction);
-    _view->addPage(PageIndex::CameraInference, std::make_shared<CameraPage>(_view.get(), _state), _cameraInferenceAction);
-    _view->addPage(PageIndex::Models, std::make_shared<ModelsPage>(_view.get(), _state), _modelsAction);
+    _view->addPage(PageIndex::ImageInference,
+                   std::make_shared<ImagePage>(_view.get(), _state),
+                   _imageInferenceAction);
+    _view->addPage(PageIndex::CameraInference,
+                   std::make_shared<CameraPage>(_view.get(), _state),
+                   _cameraInferenceAction);
+    _view->addPage(PageIndex::Models,
+                   std::make_shared<ModelsPage>(_view.get(), _state),
+                   _modelsAction);
     _centralLayout->addWidget(_view.get());
     // endregion
 

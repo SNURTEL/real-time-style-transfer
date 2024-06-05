@@ -12,7 +12,7 @@ class Downloader;
  * @brief State of application
  */
 class State {
-public:
+  public:
     State();
 
     /**
@@ -42,12 +42,11 @@ public:
      */
     std::shared_ptr<Model> getModel();
 
-private:
+  private:
     bool _loaded;
     std::optional<modelManager::PretrainedModel> _activeModel;
     std::shared_ptr<Downloader> _downloader;
     std::shared_ptr<Model> _model;
 };
 
-
-#endif //STYLE_APPLICATION_UI_STATE_HPP
+#endif // STYLE_APPLICATION_UI_STATE_HPP

@@ -31,4 +31,4 @@ std::optional<std::filesystem::path> _getModelPath(PretrainedModel);
 std::optional<std::filesystem::path> getOrDownloadModelPath(PretrainedModel);
 } // namespace modelManager
 
-#endif //STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
+#endif // STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP

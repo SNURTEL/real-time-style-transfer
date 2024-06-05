@@ -19,7 +19,7 @@ class State;
  * @brief Camera inference page
  */
 class CameraPage : public Page {
-public:
+  public:
     explicit CameraPage(QWidget *parent, std::shared_ptr<State> state);
 
     /**
@@ -42,10 +42,10 @@ public:
      */
     void deactivatePage() override;
 
-private slots:
+  private slots:
     void onButtonClicked();
 
-private:
+  private:
     std::shared_ptr<QVBoxLayout> _layout;
     std::shared_ptr<QHBoxLayout> _camerasLayout;
     std::shared_ptr<QLabel> _title;
@@ -54,5 +54,4 @@ private:
     std::shared_ptr<QPushButton> _button;
 };
 
-
-#endif //STYLE_APPLICATION_UI_PAGES_CAMERA_P
+#endif // STYLE_APPLICATION_UI_PAGES_CAMERA_P

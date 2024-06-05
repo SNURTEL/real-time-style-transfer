@@ -1,7 +1,7 @@
 #include <QThread>
 
-#include "ui/downloader.hpp"
 #include "common/model_manager.hpp"
+#include "ui/downloader.hpp"
 
 Downloader::Downloader() : QObject() {
     _thread = std::make_shared<QThread>();

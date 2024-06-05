@@ -2,21 +2,25 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QPixmap>
+#include <QPushButton>
 
-#include "ui/components/model_list_element.hpp"
 #include "common/model_manager.hpp"
-#include "ui/state.hpp"
+#include "ui/components/model_list_element.hpp"
 #include "ui/downloader.hpp"
+#include "ui/state.hpp"
 
-ModelListElement::ModelListElement(QWidget *parent, modelManager::PretrainedModel model, std::shared_ptr<State> state) : QWidget(parent) {
+ModelListElement::ModelListElement(QWidget *parent,
+                                   modelManager::PretrainedModel model,
+                                   std::shared_ptr<State> state,
+                                   std::function<void()> updateStateAndUiCallback)
+    : QWidget(parent) {
     _model = model;
     _state = std::move(state);
     _innerState = ModelListElementState::Unknown;
+    _updateStaneAndUiCallback = updateStateAndUiCallback;
     setupUi();
-    updateState();
-    updateUi();
+    _updateStaneAndUiCallback();
 }
 
 void ModelListElement::setupUi() {
@@ -28,10 +32,12 @@ void ModelListElement::setupUi() {
     _spinner = std::make_shared<QLabel>(this);
 
     _button->setDisabled(true);
-    connect(_button.get(), &QPushButton::clicked, this, &ModelListElement::onButtonClicked);
+    connect(_button.get(), &QPushButton::clicked, this,
+            &ModelListElement::onButtonClicked);
 
     QPixmap pixmap("resources/loading.png");
-    QPixmap resized = pixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap resized =
+        pixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     _spinner->setPixmap(resized);
 
     _layout->addWidget(_name.get());
@@ -47,12 +53,10 @@ void ModelListElement::updateState() {
     if (downloadedModels->contains(_model)) {
         if (_state->getActiveModel() == _model) {
             _innerState = ModelListElementState::Active;
-        }
-        else {
+        } else {
             _innerState = ModelListElementState::Downloaded;
         }
-    }
-    else {
+    } else {
         _innerState = ModelListElementState::NotDownloaded;
     }
 }
@@ -64,59 +68,57 @@ void ModelListElement::updateUi() {
     _spinner->setVisible(false);
 
     switch (_innerState) {
-        case ModelListElementState::NotDownloaded:
-            _status->setText(QString::fromUtf8("Not downloaded"));
-            _status->setStyleSheet("QLabel { color : #e55039; }");
-            _button->setDisabled(false);
-            _button->setText(QString::fromUtf8("Download"));
-            break;
-        case ModelListElementState::Downloading:
-            _status->setText(QString::fromUtf8("Downloading"));
-            _status->setStyleSheet("QLabel { color : #4a69bd; }");
-            _button->setDisabled(true);
-            _spinner->setVisible(true);
-            break;
-        case ModelListElementState::Downloaded:
-            _status->setText(QString::fromUtf8("Downloaded"));
-            _status->setStyleSheet("QLabel { color : #4a69bd; }");
-            _button->setDisabled(false);
-            _button->setText(QString::fromUtf8("Activate"));
-            break;
-        case ModelListElementState::Active:
-            _status->setText(QString::fromUtf8("Active"));
-            _status->setStyleSheet("QLabel { color : #78e08f; }");
-            _button->setDisabled(true);
-            _button->setText(QString::fromUtf8("Active"));
-            break;
-        case ModelListElementState::Unknown:
-            _status->setText(QString::fromUtf8("Unknown"));
-            _status->setStyleSheet("QLabel { color : #e55039; }");
-            _button->setDisabled(true);
-            _button->setText(QString::fromUtf8("Unknown"));
-            break;
+    case ModelListElementState::NotDownloaded:
+        _status->setText(QString::fromUtf8("Not downloaded"));
+        _status->setStyleSheet("QLabel { color : #e55039; }");
+        _button->setDisabled(false);
+        _button->setText(QString::fromUtf8("Download"));
+        break;
+    case ModelListElementState::Downloading:
+        _status->setText(QString::fromUtf8("Downloading"));
+        _status->setStyleSheet("QLabel { color : #4a69bd; }");
+        _button->setDisabled(true);
+        _spinner->setVisible(true);
+        break;
+    case ModelListElementState::Downloaded:
+        _status->setText(QString::fromUtf8("Downloaded"));
+        _status->setStyleSheet("QLabel { color : #4a69bd; }");
+        _button->setDisabled(false);
+        _button->setText(QString::fromUtf8("Activate"));
+        break;
+    case ModelListElementState::Active:
+        _status->setText(QString::fromUtf8("Active"));
+        _status->setStyleSheet("QLabel { color : #78e08f; }");
+        _button->setDisabled(true);
+        _button->setText(QString::fromUtf8("Active"));
+        break;
+    case ModelListElementState::Unknown:
+        _status->setText(QString::fromUtf8("Unknown"));
+        _status->setStyleSheet("QLabel { color : #e55039; }");
+        _button->setDisabled(true);
+        _button->setText(QString::fromUtf8("Unknown"));
+        break;
     }
 }
 
 void ModelListElement::onButtonClicked() {
     switch (_innerState) {
-        case ModelListElementState::NotDownloaded:
-            _innerState = ModelListElementState::Downloading;
-            _state->getDownloader()->download(_model);
-            break;
-        case ModelListElementState::Downloaded:
-            _state->setActiveModel(_model);
-            break;
-        default:
-            break;
+    case ModelListElementState::NotDownloaded:
+        _innerState = ModelListElementState::Downloading;
+        _state->getDownloader()->download(_model);
+        break;
+    case ModelListElementState::Downloaded:
+        _state->setActiveModel(_model);
+        break;
+    default:
+        break;
     }
 
-    updateState();
-    updateUi();
+    _updateStaneAndUiCallback();
 }
 
 void ModelListElement::onDownloadComplete() {
     _innerState = ModelListElementState::Downloaded;
 
-    updateState();
-    updateUi();
+    _updateStaneAndUiCallback();
 }

@@ -7,15 +7,14 @@ class MainWindow;
 
 class State;
 
-
 /**
  * @brief Main Qt application class
  */
 class StyleApplication : public QApplication {
-public:
+  public:
     StyleApplication(int argc, char **argv);
 
-private:
+  private:
     /**
      * @brief Main Window
      */
@@ -26,6 +25,5 @@ private:
      */
     std::shared_ptr<State> _state;
 };
-
 
 #endif // STYLE_APPLICATION_UI_APPLICATION_HPP

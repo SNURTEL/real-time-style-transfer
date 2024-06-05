@@ -22,14 +22,16 @@ class State;
  * @brief Main application window
  */
 class MainWindow : public QMainWindow {
-public:
-    explicit MainWindow(QWidget *parent = nullptr, std::shared_ptr<State> state = nullptr);
+  public:
+    explicit MainWindow(QWidget *parent = nullptr,
+                        std::shared_ptr<State> state = nullptr);
 
     /**
      * @brief Setups UI of MainWindow
      */
     void setupUi();
-private:
+
+  private:
     std::shared_ptr<State> _state;
 
     std::shared_ptr<QAction> _imageInferenceAction;

@@ -9,7 +9,7 @@ class State;
  * @brief Base Page class
  */
 class Page : public QWidget {
-public:
+  public:
     explicit Page(QWidget *parent, std::shared_ptr<State> state);
 
     /**
@@ -28,10 +28,11 @@ public:
      */
     virtual bool isActive();
 
-private:
+  private:
     bool _active{false};
-protected:
+
+  protected:
     std::shared_ptr<State> _state;
 };
 
-#endif //STYLE_APPLICATION_UI_PAGES_PAGE_HPP
+#endif // STYLE_APPLICATION_UI_PAGES_PAGE_HPP

@@ -18,9 +18,7 @@ void State::setActiveModel(modelManager::PretrainedModel model) {
     _loaded = false;
 }
 
-std::shared_ptr<Downloader> State::getDownloader() {
-    return _downloader;
-}
+std::shared_ptr<Downloader> State::getDownloader() { return _downloader; }
 
 bool State::ensureModelLoaded() {
     if (_loaded) {
@@ -32,7 +30,8 @@ bool State::ensureModelLoaded() {
     }
 
     _loaded = true;
-    std::optional<std::filesystem::path> modelPath = modelManager::getOrDownloadModelPath(_activeModel.value());
+    std::optional<std::filesystem::path> modelPath =
+        modelManager::getOrDownloadModelPath(_activeModel.value());
     if (!modelPath) {
         return false;
     }

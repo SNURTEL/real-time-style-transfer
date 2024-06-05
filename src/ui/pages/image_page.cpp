@@ -1,26 +1,27 @@
 #include <iostream>
 
-#include <QVBoxLayout>
+#include <QFileDialog>
+#include <QFont>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QFont>
 #include <QSizePolicy>
 #include <QString>
-#include <QFileDialog>
+#include <QVBoxLayout>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 
+#include "common/image.hpp"
+#include "common/model.hpp"
+#include "common/utils.hpp"
 #include "ui/pages/image_page.hpp"
 #include "ui/state.hpp"
-#include "common/image.hpp"
-#include "common/utils.hpp"
-#include "common/model.hpp"
 
-ImagePage::ImagePage(QWidget *parent, std::shared_ptr<State> state) : Page(parent, state) {
+ImagePage::ImagePage(QWidget *parent, std::shared_ptr<State> state)
+    : Page(parent, state) {
     setupUi();
 }
 
@@ -55,12 +56,13 @@ void ImagePage::setupUi() {
     // region Controls
     _loadImageButton = std::make_shared<QPushButton>(this);
     _loadImageButton->setText(QString::fromUtf8("Load image"));
-    connect(_loadImageButton.get(), &QPushButton::clicked, this, &ImagePage::onLoadImageButtonClicked);
-
+    connect(_loadImageButton.get(), &QPushButton::clicked, this,
+            &ImagePage::onLoadImageButtonClicked);
 
     _transformButton = std::make_shared<QPushButton>(this);
     _transformButton->setText(QString::fromUtf8("Transform"));
-    connect(_transformButton.get(), &QPushButton::clicked, this, &ImagePage::onTransformButtonClicked);
+    connect(_transformButton.get(), &QPushButton::clicked, this,
+            &ImagePage::onTransformButtonClicked);
 
     _controlsLayout->addWidget(_loadImageButton.get());
     _controlsLayout->addWidget(_transformButton.get());
@@ -93,12 +95,12 @@ void ImagePage::updateUi() {
     }
 }
 
-void ImagePage::deactivatePage() {
-    Page::deactivatePage();
-}
+void ImagePage::deactivatePage() { Page::deactivatePage(); }
 
 void ImagePage::onLoadImageButtonClicked() {
-    QString filename = QFileDialog::getOpenFileName(nullptr, QString::fromUtf8("Choose file"), "", QString::fromUtf8("Images (*.png *.jpg *.bmp)"));
+    QString filename = QFileDialog::getOpenFileName(
+        nullptr, QString::fromUtf8("Choose file"), "",
+        QString::fromUtf8("Images (*.png *.jpg *.bmp)"));
 
     if (!filename.isEmpty()) {
         QPixmap pixmap;
@@ -133,22 +135,21 @@ void ImagePage::onTransformButtonClicked() {
     qDebug() << "Result is here";
 
     auto denormalized = ((result + 1) * 127.5)
-                             .detach()
-                             .clamp(0, 255)
-                             .to(torch::kU8)
-                             .to(torch::kCPU);
+                            .detach()
+                            .clamp(0, 255)
+                            .to(torch::kU8)
+                            .to(torch::kCPU);
     qDebug() << "Denormalized result";
 
     // Convert result tensor to Cv2 Mat
     auto resultMat = tensorToCv2(denormalized, true);
     qDebug() << "Back to cv2";
     cv::Mat scaled;
-    cv::resize(resultMat, scaled, cv::Size(1024, 1024), 0, 0,
-                cv::INTER_LINEAR);
+    cv::resize(resultMat, scaled, cv::Size(1024, 1024), 0, 0, cv::INTER_LINEAR);
 
     // Convert Cv2 Mat to QImage, then to QPixmap
     cv::Mat bgra;
-    cv::cvtColor(scaled,  bgra, cv::COLOR_BGR2BGRA);
+    cv::cvtColor(scaled, bgra, cv::COLOR_BGR2BGRA);
     QImage img(bgra.data, bgra.cols, bgra.rows, QImage::Format_RGB32);
     qDebug() << "QImage now";
     QPixmap pixmap = QPixmap::fromImage(img);
@@ -156,5 +157,3 @@ void ImagePage::onTransformButtonClicked() {
     // Display
     _outputImage->setPixmap(pixmap);
 }
-
-
