@@ -155,31 +155,10 @@ void CameraPage::updater() {
         QPixmap pixmapL = QPixmap::fromImage(imgL);
         _cameraLeft->setPixmap(pixmapL);
 
-        cv::Mat paddedFrame;
-        int longerEdge = std::max(frame.size[0], frame.size[1]);
-        int vPadding = std::max(0, (longerEdge - frame.size[0]) / 2);
-        int hPadding = std::max(0, (longerEdge - frame.size[1]) / 2);
-        cv::copyMakeBorder(frame, paddedFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
-
-        cv::Mat downscaled;
-        cv::resize(paddedFrame, downscaled, cv::Size(paddedFrame.size[0] / 2, paddedFrame.size[1] / 2), 0, 0,
-                    cv::INTER_LINEAR);
-        at::Tensor frameTensor = cv2ToTensor(downscaled, true).cuda();
-
-        at::Tensor pred = ((model->forward(frameTensor) + 1) * 127.5)
-                                .detach()
-                                .clamp(0, 255)
-                                .to(torch::kU8)
-                                .to(torch::kCPU);
-        cv::Mat predCv = tensorToCv2(pred, true);
-        cv::Mat upscaled;
-        cv::resize(predCv, upscaled, cv::Size(paddedFrame.size[0], paddedFrame.size[1]), 0, 0,
-                    cv::INTER_LINEAR);
-        cv::Mat cropped = upscaled(cv::Rect(hPadding, vPadding, frame.size[1], frame.size[0]));
-
+        cv::Mat out = transfer(frame, model);
 
         cv::Mat imageBGRAR;
-        cv::cvtColor(cropped, imageBGRAR, cv::COLOR_BGR2BGRA);
+        cv::cvtColor(out, imageBGRAR, cv::COLOR_BGR2BGRA);
 
         _imageRight = imageBGRAR.clone();
         QImage imgR(_imageRight.value().data, _imageRight.value().cols, _imageRight.value().rows, QImage::Format_RGB32);

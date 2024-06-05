@@ -100,7 +100,7 @@ Plik binarny zostanie umieszczony w podkatalogu `src/build/<PRESET-NAME>/app`. U
 ```
 
 Modele w formacie TorchScript wyszukiwane są w podkatalogu `models` zlokalizowanym w obecnym katalogu roboczym. Jeśli
-taki nie istnieje, zostanie on utworzony podczas pobierania pierwszego z modeli.
+taki nie istnieje, zostanie on utworzony podczas pobierania pierwszego z modeli. Ponadto, do poprawnego działania aplikacji jest, aby w katalogu roboczym w momencie uruchamiania aplikacji istniał katalog `resources` wygenerowany w `src/build/<PRESET-NAME>`.
 
 Uruchomienie testów (po wcześniejszej kompilacji):
 

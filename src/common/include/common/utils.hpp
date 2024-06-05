@@ -5,6 +5,7 @@
 #define __UTILS_H__
 
 #include <opencv2/core.hpp>
+#include <common/model.hpp>
 
 #undef slots
 #include <torch/torch.h>
@@ -28,4 +29,14 @@ at::Tensor cv2ToTensor(const cv::Mat &image, bool copy = false);
  * @return cv::Mat Tensor converted to image
  */
 cv::Mat tensorToCv2(const at::Tensor &tensor, bool copy = false);
+
+/**
+ * @brief Transfer style on the image using a given model
+ * 
+ * @param image Source image [0, 1]
+ * @param model Model to be used
+ * @param downscaleFactor By what factor to downscale the image before feeding it through the model
+ * @return cv::Mat Image with transferred style [0, 255] torch::kU8
+ */
+cv::Mat transfer(const cv::Mat &image, std::shared_ptr<Model> model, float downscaleFactor = 1.0);
 #endif // __UTILS_H__

@@ -17,13 +17,19 @@
 class Model {
   public:
     /**
-     * @brief Load a traced model
+     * @brief Load a traced model from file
      *
      * @param path Traced model (.pt) path
      * @return std::optional<Model> Model or std::nullopt if loading failed
      */
     static std::optional<Model> fromFile(const std::string &path);
 
+    /**
+     * @brief Load a traced model from stream
+     *
+     * @param stream Input stream with the traced model
+     * @return std::optional<Model> Model or std::nullopt if loading failed
+     */
     static std::optional<Model> fromStream(std::istream &stream);
 
     /**
