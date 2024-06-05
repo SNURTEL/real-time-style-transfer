@@ -1,26 +1,46 @@
+#include <cassert>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
+#include <ostream>
 #include <torch/types.h>
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
+#include "common/model_manager.hpp"
 #include "common/utils.hpp"
 #include "ui/application.hpp"
 
 namespace fs = std::filesystem;
+namespace mm = modelManager;
 
 int main(int, char *[]) {
     std::cout << "Current path is " << fs::current_path() << '\n';
-    const std::string MODEL_FILE = "models/style_vangogh.ts";
 
-    auto _model = Model::fromFile(MODEL_FILE);
+    auto targetModel = mm::PretrainedModel::style_vangogh;
+
+    auto modelPath = mm::getOrDownloadModelPath(targetModel);
+
+    if (!modelPath) {
+        std::cout << "Could not get model path" << std::endl;
+        return -1;
+    }
+
+    std::cout << "Model path is " << modelPath.value() << std::endl;
+
+    std::ifstream infile;
+    infile.open(modelPath.value());
+
+    // auto _model = Model::fromFile(modelPath.value());
+    auto _model = Model::fromStream(infile);
+    infile.close();
     if (!_model) {
-        std::cout << "Cannot load model. Check if " << MODEL_FILE << "  exists."
-                  << std::endl;
+        std::cout << "Cannot load model. Check if " << modelPath.value()
+                  << "  exists." << std::endl;
         return -1;
     }
 
