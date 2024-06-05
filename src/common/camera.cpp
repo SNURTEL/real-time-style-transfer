@@ -15,7 +15,6 @@ std::optional<Camera> Camera::build(int device, int apiPreference) {
     if (!camera._videoCapture.open(device, apiPreference)) {
         return std::nullopt;
     }
-
     return camera;
 }
 

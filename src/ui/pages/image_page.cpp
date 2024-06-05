@@ -126,17 +126,17 @@ void ImagePage::onTransformButtonClicked() {
         updateUi();
     }
     cv::Mat mat = _mat.value()(cv::Rect(0, 0, _mat.value().size[1] / 2 * 2, _mat.value().size[0] / 2 * 2));
-    cv::Mat scaledFrame;
+    cv::Mat paddedFrame;
     int longerEdge = std::max(mat.size[0], mat.size[1]);
     int vPadding = std::max(0, (longerEdge - mat.size[0]) / 2);
     int hPadding = std::max(0, (longerEdge - mat.size[1]) / 2);
-    cv::copyMakeBorder(mat, scaledFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
+    cv::copyMakeBorder(mat, paddedFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
     // cv::Mat square = cv2.copyMakeBorder(src, top, bottom, left, right, borderType)
     // cv::resize(mat.value(), scaledFrame, cv::Size(512, 512), 0, 0,
     //             cv::INTER_LINEAR);
 
     // Convert to tensor
-    auto tensor = cv2ToTensor(scaledFrame, true).cuda();
+    auto tensor = cv2ToTensor(paddedFrame, true).cuda();
     qDebug() << "Converted to tensor";
 
     // Get model and forward the tensor
