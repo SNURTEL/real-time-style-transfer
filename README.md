@@ -1,8 +1,11 @@
 # 24L-ZPR
 
-Description goes here.
+A C++ app for live style transfer.
 
-[Full documentation](doc/doc.md)
+
+![live](doc/images/live.gif)
+
+## [>> Full documentation << ](doc/doc.md)
 
 ## Setup
 
@@ -11,9 +14,9 @@ Description goes here.
 - CUDA (12.X)
 - OpenCV (4.5.5)
    - Depending on your system, `libfmt-dev` / `fmt-devel` may also be needed
-- Libtorch (6.3.1)
+- Libtorch (2.2.2)
 - Qt (6.7)
-- CPython 3.12
+- _(optional)_ Python3
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
 - _(optional)_ `cppcheck`
@@ -125,3 +128,6 @@ Before submitting a PR:
 ```
 
 3. Run tests as described above
+
+
+## [>> Full documentation << ](doc/doc.md)

@@ -96,11 +96,13 @@ cmake --build src/build/<PRESET-NAME>
 Plik binarny zostanie umieszczony w podkatalogu `src/build/<PRESET-NAME>/app`. Uruchomienie aplikacji:
 
 ```shell
-./src/build/<PRESET_NAME>/app
+cd src/build/<PRESET_NAME>
+./app
 ```
 
 Modele w formacie TorchScript wyszukiwane są w podkatalogu `models` zlokalizowanym w obecnym katalogu roboczym. Jeśli
-taki nie istnieje, zostanie on utworzony podczas pobierania pierwszego z modeli. Ponadto, do poprawnego działania aplikacji jest, aby w katalogu roboczym w momencie uruchamiania aplikacji istniał katalog `resources` wygenerowany w `src/build/<PRESET-NAME>`.
+taki nie istnieje, zostanie on utworzony podczas pobierania pierwszego z modeli. Ponadto, do poprawnego działania 
+aplikacji jest, aby w katalogu roboczym w momencie uruchamiania aplikacji istniał katalog `resources` wygenerowany w `src/build/<PRESET-NAME>`.
 
 Uruchomienie testów (po wcześniejszej kompilacji):
 
@@ -132,7 +134,7 @@ z używanym kompilatorem.
 3. Na stronie "Image Inference" użytkownik może załadować własny obrazek oraz dokonać na nim transferu stylu wciskając
    przycisk "Transfer"
 4. Na stronie "Camera Inference" użytkownik może uruchomić wyświetlenie podglądu transferu stylu dla obrazu z kamery
-   wciskając przycisk "Run Standalone"
+   wciskając przycisk "Start". Wyświetlanie podglądu na żywo kończy się po wciśnięciu przycisku "Stop" lub zmianie strony.
 
 ### Dostępne modele
 
@@ -152,7 +154,7 @@ repozytorium:
 
 ```shell
 python3 -m pip install -r scripts/requirements.txt
-python3 scripts/create-cyclegan-pretrained.py <MODEL_NAME>
+python3 scripts/create_cyclegan_pretrained.py <MODEL_NAME>
 ```
 
 ### Dodatkowe narzędzia
@@ -169,6 +171,14 @@ W repozytorium zawarto również skrypty pozwalające wywołać lintery i format
 
 Wszystkie wymienione narzędzia uruchamiane są w potokach CI i brak zgłoszonych przez nie błędów jest warunkiem
 wykonania `merge` do gałęzi głównej.
+
+### Zrzuty ekranu
+
+![corgo](images/corgo.png)
+
+![live](images/live.gif)
+
+![repo](images/repo.png)
 
 ### Problemy napotkane podczas realizacji projektu
 
@@ -187,7 +197,7 @@ wykonania `merge` do gałęzi głównej.
   zaimplementowane są jednak w Pythonie i wymagają konwersji do formatu TorchScript. Pierwotnie zakładano, że sama
   konwersja będzie odbywała przez wywołanie osadzonego kodu Pythona, ostatecznie zrezygnowano z tego rozwiązania na
   rzecz wstępnego przygotowania modeli - upraszcza to aplikację i eliminuje niepotrzebne konwertowanie modeli za każdym
-  razem ten sam sposób
+  razem w ten sam sposób
 - Niska dostępność maszyn z systemem Windows w usłudze GitHub Actions - konieczność manualnego testowania
 - Problemy z biblioteką Qt
     - System kompilacji biblioteki Qt powodował błędy w innych bibliotekach, co wymagało otoczenia wszystkich include'ów
@@ -203,3 +213,4 @@ wykonania `merge` do gałęzi głównej.
     - IDE, ze względu na mnogość definicji oraz ciągłe analizowanie kodu źródłowego nie były w stanie zapewniać stałej
       pomocy programiście - czasem zawodziły nawet w podstawowych zadaniach kolorowania składni czy podglądania
       implementacji danej klasy
+  
