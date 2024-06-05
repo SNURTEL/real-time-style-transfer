@@ -5,6 +5,7 @@
 #define STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP
 
 #include <QWidget>
+#include <opencv2/core/mat.hpp>
 
 #include "page.hpp"
 
@@ -61,6 +62,7 @@ class ImagePage : public Page {
     std::shared_ptr<QPushButton> _loadImageButton;
     std::shared_ptr<QPushButton> _transformButton;
     std::optional<std::string> _inputImagePath;
+    std::optional<cv::Mat> _currImage;
 };
 
 #endif // STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP

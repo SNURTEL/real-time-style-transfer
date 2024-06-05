@@ -4,6 +4,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
+#include <optional>
+#include <thread>
 #include <torch/types.h>
 
 #include <QHBoxLayout>
@@ -22,6 +24,10 @@ CameraPage::CameraPage(QWidget *parent, std::shared_ptr<State> state)
     : Page(parent, state) {
     setupUi();
     updateUi();
+}
+
+CameraPage::~CameraPage() {
+    setRunning(false);
 }
 
 void CameraPage::setupUi() {
@@ -45,7 +51,6 @@ void CameraPage::setupUi() {
     // endregion
 
     if (CAMERAS > 0) {
-        //        _camera = std::make_shared<QCamera>(QCameraDevice::FrontFace);
         _cameraLeft = std::make_shared<QLabel>(this);
         _cameraRight = std::make_shared<QLabel>(this);
 
@@ -59,7 +64,7 @@ void CameraPage::setupUi() {
 
     // region Button
     _button = std::make_shared<QPushButton>(this);
-    _button->setText(QString::fromUtf8("Run standalone"));
+    _button->setText(QString::fromUtf8("Start"));
     connect(_button.get(), &QPushButton::clicked, this,
             &CameraPage::onButtonClicked);
     // endregion
@@ -94,53 +99,91 @@ void CameraPage::activatePage() {
     updateUi();
 }
 
-void CameraPage::deactivatePage() { Page::deactivatePage(); }
+void CameraPage::deactivatePage() { 
+    Page::deactivatePage();
+    setRunning(false);
+}
 
 void CameraPage::onButtonClicked() {
-    std::shared_ptr<Model> model = _state->getModel();
+    _button->setDisabled(true);
 
+    setRunning(!_isRunning);
+
+    _button->setDisabled(false);
+    updateUi();
+}
+
+void CameraPage::setRunning(bool flag) {
+    _isRunning = flag;
+    if (_isRunning) {
+        if (!_updaterThread) {
+            _updaterThread = std::thread(std::bind(&CameraPage::updater, this));
+        }
+        _button->setText(QString::fromUtf8("Stop"));
+    } else {
+        if (_updaterThread && _updaterThread->joinable()) {
+            _updaterThread->join();
+            _updaterThread = std::nullopt;
+        } 
+        _button->setText(QString::fromUtf8("Start"));
+    }
+}
+
+void CameraPage::updater() {
     auto cam = Camera::build();
-
     if (!cam) {
         std::cerr << "Failed to initialize camera" << std::endl;
         return;
     }
-
-    _button->setDisabled(true);
-    for (;;) {
-        auto frame = cam->nextFrame();
-        if (!frame) {
+    std::shared_ptr<Model> model = _state->getModel();
+    while (_isRunning) {
+        auto __frame = cam->nextFrame();
+        if (!__frame) {
             std::cerr << "Error getting frame" << std::endl;
             return;
         }
-        cv::Mat scaledFrame;
-        cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
-                   cv::INTER_LINEAR);
-        at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
+        cv::Mat _frame = __frame.value()(cv::Rect(0, 0, __frame.value().size[1] / 2 * 2, __frame.value().size[0] / 2 * 2));
+        cv::Mat frame;
+        cv::resize(_frame, frame, cv::Size(_frame.size[1] / 2, _frame.size[0] / 2), 0, 0,
+                    cv::INTER_LINEAR);
+
+        cv::Mat imageBGRAL;
+        cv::cvtColor(frame, imageBGRAL, cv::COLOR_BGR2BGRA);
+
+        _imageLeft = imageBGRAL.clone();
+        QImage imgL(_imageLeft.value().data, _imageLeft.value().cols, _imageLeft.value().rows, QImage::Format_RGB32);
+        QPixmap pixmapL = QPixmap::fromImage(imgL);
+        _cameraLeft->setPixmap(pixmapL);
+
+        cv::Mat paddedFrame;
+        int longerEdge = std::max(frame.size[0], frame.size[1]);
+        int vPadding = std::max(0, (longerEdge - frame.size[0]) / 2);
+        int hPadding = std::max(0, (longerEdge - frame.size[1]) / 2);
+        cv::copyMakeBorder(frame, paddedFrame, vPadding, vPadding, hPadding, hPadding, cv::BORDER_ISOLATED);
+
+        cv::Mat downscaled;
+        cv::resize(paddedFrame, downscaled, cv::Size(paddedFrame.size[0] / 2, paddedFrame.size[1] / 2), 0, 0,
+                    cv::INTER_LINEAR);
+        at::Tensor frameTensor = cv2ToTensor(downscaled, true).cuda();
 
         at::Tensor pred = ((model->forward(frameTensor) + 1) * 127.5)
-                              .detach()
-                              .clamp(0, 255)
-                              .to(torch::kU8)
-                              .to(torch::kCPU);
+                                .detach()
+                                .clamp(0, 255)
+                                .to(torch::kU8)
+                                .to(torch::kCPU);
         cv::Mat predCv = tensorToCv2(pred, true);
         cv::Mat upscaled;
-        cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
-                   cv::INTER_LINEAR);
+        cv::resize(predCv, upscaled, cv::Size(paddedFrame.size[0], paddedFrame.size[1]), 0, 0,
+                    cv::INTER_LINEAR);
+        cv::Mat cropped = upscaled(cv::Rect(hPadding, vPadding, frame.size[1], frame.size[0]));
 
-        cv::imshow("Live", upscaled.clone());
-        // cv::imshow("Live", frame.value().clone()); // @temp
 
-        cv::waitKey(5);
+        cv::Mat imageBGRAR;
+        cv::cvtColor(cropped, imageBGRAR, cv::COLOR_BGR2BGRA);
 
-        if (cv::getWindowProperty("Live", cv::WND_PROP_VISIBLE) < 1) {
-            break;  // Break if the window is closed
-        }
-
-        if (!this->isVisible() || !this->isEnabled()) {
-            break;
-        }
+        _imageRight = imageBGRAR.clone();
+        QImage imgR(_imageRight.value().data, _imageRight.value().cols, _imageRight.value().rows, QImage::Format_RGB32);
+        QPixmap pixmapR = QPixmap::fromImage(imgR);
+        _cameraRight->setPixmap(pixmapR);
     }
-
-    _button->setDisabled(false);
 }
