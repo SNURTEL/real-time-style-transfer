@@ -105,6 +105,9 @@ void ModelListElement::onButtonClicked() {
     switch (_innerState) {
     case ModelListElementState::NotDownloaded:
         _innerState = ModelListElementState::Downloading;
+        updateUi();
+        update();
+        repaint();
         _state->getDownloader()->download(_model);
         break;
     case ModelListElementState::Downloaded:

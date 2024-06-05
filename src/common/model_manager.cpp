@@ -57,6 +57,10 @@ modelManager::getDownloadedModels() {
 
     std::set<modelManager::PretrainedModel> availableModels{};
 
+    if (!std::filesystem::is_directory(std::filesystem::path(path))) {
+        return availableModels;
+    }
+
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
         if (entry.is_directory()) {
             continue;
