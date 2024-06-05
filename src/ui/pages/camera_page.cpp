@@ -1,9 +1,17 @@
 #include <iostream>
 
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
+#include <torch/types.h>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 
+#include "common/camera.hpp"
 #include "ui/pages/camera_page.hpp"
 #include "ui/state.hpp"
 
@@ -47,6 +55,12 @@ void CameraPage::setupUi() {
         _camerasLayout->addWidget(_cameraRight.get());
     }
 
+    // region Button
+    _button = std::make_shared<QPushButton>(this);
+    _button->setText(QString::fromUtf8("Run standalone"));
+    connect(_button.get(), &QPushButton::clicked, this, &CameraPage::onButtonClicked);
+    // endregion
+
     this->setLayout(_layout.get());
     _layout->addLayout(_camerasLayout.get());
 }
@@ -68,4 +82,48 @@ void CameraPage::activatePage() {
 
 void CameraPage::deactivatePage() {
     Page::deactivatePage();
+}
+
+void CameraPage::onButtonClicked() {
+    // std::shared_ptr<Model> model = _state->getModel();
+
+    auto cam = Camera::build();
+
+    if (!cam) {
+        std::cerr << "Failed to initialize camera" << std::endl;
+        return;
+    }
+
+    for (;;) {
+        auto frame = cam->nextFrame();
+        if (!frame) {
+            std::cerr << "Error getting frame" << std::endl;
+            return;
+        }
+//        cv::Mat scaledFrame;
+//        cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
+//                   cv::INTER_LINEAR);
+//        at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
+//
+//        at::Tensor pred = ((model.forward(frameTensor) + 1) * 127.5)
+//                .detach()
+//                .clamp(0, 255)
+//                .to(torch::kU8)
+//                .to(torch::kCPU);
+//        cv::Mat predCv = tensorToCv2(pred, true);
+//        cv::Mat upscaled;
+//        cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
+//                   cv::INTER_LINEAR);
+
+        // cv::imshow("Live", upscaled.clone());
+        cv::imshow("Live", frame.value().clone()); // @temp
+
+        if (cv::waitKey(5) >= 0) {
+            break;
+        }
+
+        if (!this->isVisible() || !this->isEnabled()) {
+            break;
+        }
+    }
 }

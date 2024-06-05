@@ -11,6 +11,8 @@ class QHBoxLayout;
 
 class QLabel;
 
+class QPushButton;
+
 class State;
 
 /**
@@ -40,12 +42,16 @@ public:
      */
     void deactivatePage() override;
 
+private slots:
+    void onButtonClicked();
+
 private:
     std::shared_ptr<QVBoxLayout> _layout;
     std::shared_ptr<QHBoxLayout> _camerasLayout;
     std::shared_ptr<QLabel> _title;
     std::shared_ptr<QLabel> _cameraLeft;
     std::shared_ptr<QLabel> _cameraRight;
+    std::shared_ptr<QPushButton> _button;
 };
 
 
