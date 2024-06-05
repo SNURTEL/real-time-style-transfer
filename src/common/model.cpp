@@ -1,5 +1,6 @@
 #include <optional>
 #include <string>
+#include <istream>
 
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
@@ -23,6 +24,14 @@ Model::Model(const torch::jit::Module &module) : _module(module){};
 std::optional<Model> Model::fromFile(const std::string &path) {
     try {
         return std::make_optional(Model(torch::jit::load(path)));
+    } catch (const c10::Error &e) {
+        return std::nullopt;
+    }
+}
+
+std::optional<Model> Model::fromStream(std::istream &stream) {
+    try {
+        return std::make_optional(Model(torch::jit::load(stream)));
     } catch (const c10::Error &e) {
         return std::nullopt;
     }

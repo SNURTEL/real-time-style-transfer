@@ -7,6 +7,7 @@
 #include <opencv2/videoio.hpp>
 #include <ostream>
 #include <torch/types.h>
+#include <fstream>
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
@@ -31,7 +32,13 @@ int main(int, char *[]) {
 
     std::cout << "Model path is " << modelPath.value() << std::endl;
 
-    auto _model = Model::fromFile(modelPath.value());
+
+    std::ifstream infile; 
+    infile.open(modelPath.value()); 
+
+    // auto _model = Model::fromFile(modelPath.value());
+    auto _model = Model::fromStream(infile);
+    infile.close();
     if (!_model) {
         std::cout << "Cannot load model. Check if " << modelPath.value()
                   << "  exists." << std::endl;
