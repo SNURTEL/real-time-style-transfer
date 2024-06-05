@@ -7,7 +7,7 @@
 #include <opencv2/core.hpp>
 
 #undef slots
-#include <torch/script.h>
+#include <torch/torch.h>
 #define slots Q_SLOTS
 /**
  * @brief Convert a cv2 image of shape [x, y, channels] to a Torch tensor of

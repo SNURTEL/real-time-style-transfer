@@ -1,11 +1,12 @@
 #include "common/utils.hpp"
 #include <ATen/core/TensorBody.h>
-#include <catch2/catch_test_macros.hpp>
 #include <complex>
 #include <iostream>
-#include <opencv2/core/mat.hpp>
 #include <torch/torch.h>
 #include <torch/types.h>
+#undef CHECK  /* Torch provides a CHECK macro, which conflicts with Catch2 */
+#include <catch2/catch_test_macros.hpp>
+#include <opencv2/core/mat.hpp>
 
 TEST_CASE("Test tensor to cv2 conversion") {
     at::IntArrayRef in_size = {1, 3, 2, 2};
