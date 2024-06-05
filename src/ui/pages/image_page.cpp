@@ -8,6 +8,11 @@
 #include <QSizePolicy>
 #include <QString>
 #include <QFileDialog>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
 
 #include "ui/pages/image_page.hpp"
 #include "ui/state.hpp"
@@ -111,14 +116,14 @@ void ImagePage::onTransformButtonClicked() {
     }
 
     // Load to Cv2 mat
-    auto mat = image::loadImage(_inputImagePath.value());
+    auto mat = image::loadImage(_inputImagePath.value(), cv::IMREAD_COLOR);
     if (!mat) {
         _inputImagePath = std::nullopt;
         updateUi();
     }
 
     // Convert to tensor
-    auto tensor = cv2ToTensor(mat.value());
+    auto tensor = cv2ToTensor(mat.value(), true).cuda();
     qDebug() << "Converted to tensor";
 
     // Get model and forward the tensor
@@ -127,12 +132,24 @@ void ImagePage::onTransformButtonClicked() {
     auto result = model->forward(tensor);
     qDebug() << "Result is here";
 
+    auto denormalized = ((result + 1) * 127.5)
+                             .detach()
+                             .clamp(0, 255)
+                             .to(torch::kU8)
+                             .to(torch::kCPU);
+    qDebug() << "Denormalized result";
+
     // Convert result tensor to Cv2 Mat
-    auto resultMat = tensorToCv2(result);
+    auto resultMat = tensorToCv2(denormalized, true);
     qDebug() << "Back to cv2";
+    cv::Mat scaled;
+    cv::resize(resultMat, scaled, cv::Size(1024, 1024), 0, 0,
+                cv::INTER_LINEAR);
 
     // Convert Cv2 Mat to QImage, then to QPixmap
-    QImage img((uchar*)resultMat.data, resultMat.cols, resultMat.rows, QImage::Format_RGB32);
+    cv::Mat bgra;
+    cv::cvtColor(scaled,  bgra, cv::COLOR_BGR2BGRA);
+    QImage img(bgra.data, bgra.cols, bgra.rows, QImage::Format_RGB32);
     qDebug() << "QImage now";
     QPixmap pixmap = QPixmap::fromImage(img);
     qDebug() << "Nearly finished";

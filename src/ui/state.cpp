@@ -24,7 +24,7 @@ std::shared_ptr<Downloader> State::getDownloader() {
 
 bool State::ensureModelLoaded() {
     if (_loaded) {
-        return false;
+        return true;
     }
 
     if (!_activeModel) {

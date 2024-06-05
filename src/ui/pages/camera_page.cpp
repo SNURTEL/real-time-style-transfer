@@ -12,6 +12,7 @@
 #include <QPushButton>
 
 #include "common/camera.hpp"
+#include "common/utils.hpp"
 #include "ui/pages/camera_page.hpp"
 #include "ui/state.hpp"
 
@@ -85,7 +86,7 @@ void CameraPage::deactivatePage() {
 }
 
 void CameraPage::onButtonClicked() {
-    // std::shared_ptr<Model> model = _state->getModel();
+    std::shared_ptr<Model> model = _state->getModel();
 
     auto cam = Camera::build();
 
@@ -100,23 +101,23 @@ void CameraPage::onButtonClicked() {
             std::cerr << "Error getting frame" << std::endl;
             return;
         }
-//        cv::Mat scaledFrame;
-//        cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
-//                   cv::INTER_LINEAR);
-//        at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
-//
-//        at::Tensor pred = ((model.forward(frameTensor) + 1) * 127.5)
-//                .detach()
-//                .clamp(0, 255)
-//                .to(torch::kU8)
-//                .to(torch::kCPU);
-//        cv::Mat predCv = tensorToCv2(pred, true);
-//        cv::Mat upscaled;
-//        cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
-//                   cv::INTER_LINEAR);
+       cv::Mat scaledFrame;
+       cv::resize(frame.value(), scaledFrame, cv::Size(256, 256), 0, 0,
+                  cv::INTER_LINEAR);
+       at::Tensor frameTensor = cv2ToTensor(scaledFrame, true).cuda();
 
-        // cv::imshow("Live", upscaled.clone());
-        cv::imshow("Live", frame.value().clone()); // @temp
+       at::Tensor pred = ((model->forward(frameTensor) + 1) * 127.5)
+               .detach()
+               .clamp(0, 255)
+               .to(torch::kU8)
+               .to(torch::kCPU);
+       cv::Mat predCv = tensorToCv2(pred, true);
+       cv::Mat upscaled;
+       cv::resize(predCv, upscaled, cv::Size(1024, 1024), 0, 0,
+                  cv::INTER_LINEAR);
+
+        cv::imshow("Live", upscaled.clone());
+        // cv::imshow("Live", frame.value().clone()); // @temp
 
         if (cv::waitKey(5) >= 0) {
             break;
