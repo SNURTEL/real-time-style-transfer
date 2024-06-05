@@ -57,3 +57,8 @@ cv::Mat transfer(const cv::Mat &image, std::shared_ptr<Model> model, float downs
     return cropped.clone();
 
 }
+
+bool isCameraAvailable() {
+    auto cap = cv::VideoCapture(0);
+    return cap.isOpened();
+}

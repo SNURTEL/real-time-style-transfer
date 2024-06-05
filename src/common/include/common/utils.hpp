@@ -39,4 +39,10 @@ cv::Mat tensorToCv2(const at::Tensor &tensor, bool copy = false);
  * @return cv::Mat Image with transferred style [0, 255] torch::kU8
  */
 cv::Mat transfer(const cv::Mat &image, std::shared_ptr<Model> model, float downscaleFactor = 1.0);
+
+
+/**
+ * @brief Check if a camera is availables
+ */
+bool isCameraAvailable();
 #endif // __UTILS_H__
