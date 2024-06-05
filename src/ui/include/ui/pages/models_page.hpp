@@ -36,6 +36,9 @@ class ModelsPage : public Page {
      */
     void deactivatePage() override;
 
+    /**
+     * @brief Update children widgets
+     */
     void updateChildren();
 
   private:

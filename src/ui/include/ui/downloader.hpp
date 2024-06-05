@@ -6,10 +6,17 @@
 
 class QThread;
 
+/**
+ * @brief Downloaded class
+ */
 class Downloader : public QObject {
   public:
     Downloader();
 
+    /**
+     * Download model
+     * @param model Model to download
+     */
     void download(modelManager::PretrainedModel model);
 
   private:
