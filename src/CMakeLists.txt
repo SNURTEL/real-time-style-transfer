@@ -111,3 +111,11 @@ if (WIN32)
             $<TARGET_FILE_DIR:app>
     )
 endif ()
+
+
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/ui/resources/")
+
+add_custom_command(TARGET app POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} $<TARGET_FILE_DIR:app>/resources
+            COMMAND_EXPAND_LISTS
+    )
