@@ -131,8 +131,10 @@ void CameraPage::onButtonClicked() {
         cv::imshow("Live", upscaled.clone());
         // cv::imshow("Live", frame.value().clone()); // @temp
 
-        if (cv::waitKey(5) >= 0) {
-            break;
+        cv::waitKey(5);
+
+        if (cv::getWindowProperty("Live", cv::WND_PROP_VISIBLE) < 1) {
+            break;  // Break if the window is closed
         }
 
         if (!this->isVisible() || !this->isEnabled()) {
