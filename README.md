@@ -2,6 +2,8 @@
 
 Description goes here.
 
+[Full documentation](doc/doc.md)
+
 ## Setup
 
 #### Prerequisites
@@ -10,6 +12,7 @@ Description goes here.
 - OpenCV (4.5.5)
    - Depending on your system, `libfmt-dev` / `fmt-devel` may also be needed
 - Libtorch (6.3.1)
+- Qt (6.7)
 - CPython 3.12
 - _(optional)_ `clang-format`
 - _(optional)_ `clang-tidy`
@@ -29,6 +32,8 @@ If your cmake struggles to find CUDA, Libtorch or OpenCV, you can specify their 
 - CUDA - `CUDACXX=/path/to/cuda/nvcc` (usually something like `CUDACXX=/usr/local/cuda-12.4/bin/nvcc`)
 - Libtorch - `Torch_DIR`
 - OpenCV - `OpenCV_DIR`
+
+If you encounter errors with Qt, prefer setting the path with `cmake` argument `-DCMAKE_PREFIX_PATH=/path/to/qt` rather than with `Qt_DIR` env variable - it may be able to find all library components.
 
 If you want to download models directly from the app, python development headers mus be installed. CMake will look from for version 3.9-3.12 automatically, you can also specify a version explicitly with `-DPYTHON_VERSION=<python3XX>`
 
