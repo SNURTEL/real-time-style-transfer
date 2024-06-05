@@ -1,3 +1,6 @@
+/**
+ * @brief Image Page module
+ */
 #ifndef STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP
 #define STYLE_APPLICATION_UI_PAGES_IMAGE_PAGE_HPP
 

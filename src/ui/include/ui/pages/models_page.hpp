@@ -1,3 +1,6 @@
+/**
+ * @brief Models Repository page module
+ */
 #ifndef STYLE_APPLICATION_UI_PAGES_MODELS_PAGE_HPP
 #define STYLE_APPLICATION_UI_PAGES_MODELS_PAGE_HPP
 

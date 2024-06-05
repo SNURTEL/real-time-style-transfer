@@ -1,3 +1,6 @@
+/**
+ * @brief Module for main window
+ */
 #ifndef STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
 #define STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
 

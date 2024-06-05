@@ -1,3 +1,6 @@
+/**
+ * @brief Module for managing pages and navigation
+ */
 #ifndef STYLE_APPLICATION_UI_VIEW_HPP
 #define STYLE_APPLICATION_UI_VIEW_HPP
 

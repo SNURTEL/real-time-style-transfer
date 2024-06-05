@@ -1,3 +1,6 @@
+/**
+ * @brief Module for managing models
+ */
 #ifndef STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
 #define STYLE_APPLICATION_COMMON_MODEL_MANAGER_HPP
 

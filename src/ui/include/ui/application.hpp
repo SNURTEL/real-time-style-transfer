@@ -1,3 +1,6 @@
+/**
+ * @brief Main application module
+ */
 #ifndef STYLE_APPLICATION_UI_APPLICATION_HPP
 #define STYLE_APPLICATION_UI_APPLICATION_HPP
 

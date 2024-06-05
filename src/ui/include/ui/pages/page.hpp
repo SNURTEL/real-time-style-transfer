@@ -1,3 +1,6 @@
+/**
+ * @brief Default Page module
+ */
 #ifndef STYLE_APPLICATION_UI_PAGES_PAGE_HPP
 #define STYLE_APPLICATION_UI_PAGES_PAGE_HPP
 

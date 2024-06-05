@@ -1,3 +1,6 @@
+/**
+ * @brief Module for managing state of application
+ */
 #ifndef STYLE_APPLICATION_UI_STATE_HPP
 #define STYLE_APPLICATION_UI_STATE_HPP
 

@@ -1,3 +1,6 @@
+/**
+ * @brief Module for managing downloading models
+ */
 #ifndef STYLE_APPLICATION_UI_DOWNLOADER_HPP
 #define STYLE_APPLICATION_UI_DOWNLOADER_HPP
 

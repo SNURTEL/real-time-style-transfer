@@ -1,3 +1,6 @@
+/**
+ * @brief Module for managing images
+ */
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 

@@ -1,3 +1,6 @@
+/**
+ * @brief Camera page module
+ */
 #ifndef STYLE_APPLICATION_UI_PAGES_CAMERA_PAGE_HPP
 #define STYLE_APPLICATION_UI_PAGES_CAMERA_PAGE_HPP
 

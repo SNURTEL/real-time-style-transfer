@@ -1,3 +1,7 @@
+/**
+ * @brief Module for managing Cameras
+ */
+
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 

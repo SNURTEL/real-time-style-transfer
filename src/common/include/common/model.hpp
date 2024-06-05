@@ -1,3 +1,6 @@
+/**
+ * @brief Model module
+ */
 #ifndef STYLE_APPLICATION_COMMON_MODEL_HPP
 #define STYLE_APPLICATION_COMMON_MODEL_HPP
 
