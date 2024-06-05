@@ -16,7 +16,6 @@ set(VCPKG_MANIFEST_MODE ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEFINED_IN_CMAKELISTS")
 
-
 # [Windows]
 if (WIN32)
     set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
@@ -52,9 +51,6 @@ ENDIF ()
 # apt does not have QT 6.3, which introduces `qt_standard_project_setup`
 if (Qt6Core_VERSION VERSION_LESS "6.3")
     message( "Qt version lower that 6.3; cannot use qt_standard_project_setup" )
-    set(CMAKE_AUTOMOC ON) 
-    set(CMAKE_AUTORCC ON) 
-    set(CMAKE_AUTOUIC ON)
 else ()
     qt_standard_project_setup()
 endif ()
@@ -115,3 +111,11 @@ if (WIN32)
             $<TARGET_FILE_DIR:app>
     )
 endif ()
+
+
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/ui/resources/")
+
+add_custom_command(TARGET app POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${RESOURCES_DIR} $<TARGET_FILE_DIR:app>/resources
+            COMMAND_EXPAND_LISTS
+    )

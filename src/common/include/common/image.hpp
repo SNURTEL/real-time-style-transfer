@@ -1,9 +1,14 @@
+/**
+ * @brief Module for managing images
+ */
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
+#undef slots
 #include <torch/script.h>
+#define slots Q_SLOTS
 
 namespace image {
 /**

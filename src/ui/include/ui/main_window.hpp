@@ -1,45 +1,50 @@
+/**
+ * @brief Module for main window
+ */
 #ifndef STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
 #define STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP
 
 #include <QMainWindow>
+#include <string>
 
-class QPushButton;
-class QLabel;
-class QPixmap;
-class ModelManager;
+class QAction;
+
+class QVBoxLayout;
+
+class QToolBar;
+
+class QWidget;
+
+class View;
+
+enum class PageIndex;
+
+class State;
 
 /**
  * @brief Main application window
- *
  */
 class MainWindow : public QMainWindow {
   public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr,
+                        std::shared_ptr<State> state = nullptr);
 
     /**
-     * @brief Display a given image
-     *
-     * @param map
+     * @brief Setups UI of MainWindow
      */
-    void setImage(QPixmap &map);
-
-    /**
-     * @brief Set the Model Manager object
-     *
-     * @param manager
-     */
-    void setModelManager(std::shared_ptr<ModelManager> manager);
+    void setupUi();
 
   private:
-    std::string imageFilename;
-    std::shared_ptr<ModelManager> modelManager;
-    std::shared_ptr<QPushButton> loadButton;
-    std::shared_ptr<QPushButton> runButton;
-    std::shared_ptr<QLabel> image;
-    std::shared_ptr<QLabel> text;
+    std::shared_ptr<State> _state;
 
-    void onLoadButtonClicked();
-    void onRunButtonClicked();
+    std::shared_ptr<QAction> _imageInferenceAction;
+    std::shared_ptr<QAction> _cameraInferenceAction;
+    std::shared_ptr<QAction> _modelsAction;
+
+    std::shared_ptr<QWidget> _centralWidget;
+    std::shared_ptr<QVBoxLayout> _centralLayout;
+    std::shared_ptr<QToolBar> _toolBar;
+    std::shared_ptr<View> _view;
 };
 
 #endif // STYLE_APPLICATION_UI_MAIN_APPLICATION_HPP

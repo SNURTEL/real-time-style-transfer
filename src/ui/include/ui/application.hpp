@@ -1,33 +1,32 @@
+/**
+ * @brief Main application module
+ */
 #ifndef STYLE_APPLICATION_UI_APPLICATION_HPP
 #define STYLE_APPLICATION_UI_APPLICATION_HPP
 
 #include <QApplication>
 
-class ModelManager;
-
 class MainWindow;
 
+class State;
+
 /**
- * @brief Main Qt application class.
- *
+ * @brief Main Qt application class
  */
 class StyleApplication : public QApplication {
   public:
-    StyleApplication(int argc, char *argv[],
-                     const std::shared_ptr<ModelManager> &manager);
+    StyleApplication(int argc, char **argv);
 
   private:
     /**
-     * @brief Model manager
-     *
+     * @brief Main Window
      */
-    std::shared_ptr<ModelManager> modelManager;
+    std::shared_ptr<MainWindow> _mainWindow;
 
     /**
-     * @brief Main Qt window
-     *
+     * @brief State of application
      */
-    std::shared_ptr<MainWindow> mainWindow;
+    std::shared_ptr<State> _state;
 };
 
 #endif // STYLE_APPLICATION_UI_APPLICATION_HPP

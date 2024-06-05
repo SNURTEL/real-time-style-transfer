@@ -1,15 +1,12 @@
-// #include <memory>
-// // cppcheck-suppress missingInclude
-// #include "common/manager.hpp"
-// #include "ui/application.hpp"
-// #include "ui/main_window.hpp"
+#include <memory>
 
-// StyleApplication::StyleApplication(int argc, char **argv,
-//                                    const std::shared_ptr<ModelManager>
-//                                    &manager)
-//     : QApplication(argc, argv) {
-//     modelManager = manager;
-//     mainWindow = std::make_shared<MainWindow>();
-//     mainWindow->setModelManager(manager);
-//     mainWindow->show();
-// }
+#include "ui/application.hpp"
+#include "ui/main_window.hpp"
+#include "ui/state.hpp"
+
+StyleApplication::StyleApplication(int argc, char **argv)
+    : QApplication(argc, argv) {
+    _state = std::make_shared<State>();
+    _mainWindow = std::make_shared<MainWindow>(nullptr, _state);
+    _mainWindow->show();
+}

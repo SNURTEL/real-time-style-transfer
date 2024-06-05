@@ -8,8 +8,18 @@
 #include <ostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
+
+std::vector<modelManager::PretrainedModel> modelManager::getAllModels() {
+    std::vector<modelManager::PretrainedModel> models;
+    models.push_back(modelManager::style_monet);
+    models.push_back(modelManager::style_cezanne);
+    models.push_back(modelManager::style_ukiyoe);
+    models.push_back(modelManager::style_vangogh);
+    return models;
+}
 
 std::string modelManager::pretrainedModelToString(PretrainedModel model) {
     switch (model) {
@@ -46,6 +56,10 @@ modelManager::getDownloadedModels() {
     std::string path = "./models";
 
     std::set<modelManager::PretrainedModel> availableModels{};
+
+    if (!std::filesystem::is_directory(std::filesystem::path(path))) {
+        return availableModels;
+    }
 
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
         if (entry.is_directory()) {
@@ -112,7 +126,6 @@ modelManager::_getModelPath(modelManager::PretrainedModel model) {
     if (!fs::exists(modelPath)) {
         return std::nullopt;
     }
-
     return modelPath;
 }
 

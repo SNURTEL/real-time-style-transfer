@@ -1,3 +1,5 @@
+#include <filesystem>
+#include <iostream>
 #include <istream>
 #include <optional>
 #include <string>
@@ -5,8 +7,10 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
+#undef slots
 #include <torch/csrc/jit/api/module.h>
 #include <torch/script.h>
+#define slots Q_SLOTS
 
 #include "common/model.hpp"
 
@@ -25,6 +29,7 @@ std::optional<Model> Model::fromFile(const std::string &path) {
     try {
         return std::make_optional(Model(torch::jit::load(path)));
     } catch (const c10::Error &e) {
+        std::cerr << e.what() << "\n";
         return std::nullopt;
     }
 }

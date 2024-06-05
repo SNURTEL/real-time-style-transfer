@@ -1,93 +1,102 @@
-// #include <fmt/core.h>
-// #include <memory>
-// #include <utility>
+#include <QAction>
+#include <QToolBar>
+#include <QVBoxLayout>
+#include <QWidget>
 
-// #include "common/manager.hpp"
-// #include <QFileDialog>
-// #include <QLabel>
-// #include <QMessageBox>
-// #include <QObject>
-// #include <QPushButton>
-// #include <QString>
+#include "ui/main_window.hpp"
+#include "ui/pages/camera_page.hpp"
+#include "ui/pages/image_page.hpp"
+#include "ui/pages/models_page.hpp"
+#include "ui/pages/page_index.hpp"
+#include "ui/state.hpp"
+#include "ui/view.hpp"
 
-// #include "ui/main_window.hpp"
+MainWindow::MainWindow(QWidget *parent, std::shared_ptr<State> state)
+    : QMainWindow(parent) {
+    _state = state;
+    setupUi();
+}
 
-// MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-//     setWindowTitle("Style Transfer Main Window");
-//     resize(400, 300);
+void MainWindow::setupUi() {
+    setWindowTitle("Style Transfer Application");
+    resize(800, 600);
 
-//     loadButton = std::make_shared<QPushButton>("Load", this);
-//     loadButton->setGeometry(10, 10, 100, 50);
-//     QObject::connect(loadButton.get(), &QPushButton::clicked, this,
-//                      &MainWindow::onLoadButtonClicked);
+    // region Create Actions
+    QIcon imageIcon;
+    QIcon cameraIcon;
+    QIcon modelsIcon;
+    imageIcon.addFile(QString::fromUtf8("resources/image.png"), QSize(),
+                      QIcon::Normal, QIcon::Off);
+    cameraIcon.addFile(QString::fromUtf8("resources/camera.png"), QSize(),
+                       QIcon::Normal, QIcon::Off);
+    modelsIcon.addFile(QString::fromUtf8("resources/models.png"), QSize(),
+                       QIcon::Normal, QIcon::Off);
 
-//     runButton = std::make_shared<QPushButton>("Run", this);
-//     runButton->setGeometry(130, 10, 100, 50);
-//     QObject::connect(runButton.get(), &QPushButton::clicked, this,
-//                      &MainWindow::onRunButtonClicked);
+    _imageInferenceAction = std::make_shared<QAction>(this);
+    _imageInferenceAction->setObjectName(
+        QString::fromUtf8("ImageInferenceAction"));
+    _imageInferenceAction->setCheckable(true);
+    _imageInferenceAction->setChecked(false);
+    _imageInferenceAction->setEnabled(true);
+    _imageInferenceAction->setIcon(imageIcon);
+    _imageInferenceAction->setText("Image Inference");
+    _imageInferenceAction->setToolTip("Switch to image inference");
 
-//     image = std::make_shared<QLabel>(this);
-//     text = std::make_shared<QLabel>(this);
-//     text->setGeometry(130, 80, 200, 50);
+    _cameraInferenceAction = std::make_shared<QAction>(this);
+    _cameraInferenceAction->setObjectName(
+        QString::fromUtf8("CameraInferenceAction"));
+    _cameraInferenceAction->setCheckable(true);
+    _cameraInferenceAction->setChecked(false);
+    _cameraInferenceAction->setEnabled(true);
+    _cameraInferenceAction->setIcon(cameraIcon);
+    _cameraInferenceAction->setText("Camera Inference");
+    _cameraInferenceAction->setToolTip("Switch to camera inference");
 
-//     QPixmap pixmap;
+    _modelsAction = std::make_shared<QAction>(this);
+    _modelsAction->setObjectName(QString::fromUtf8("ModelsAction"));
+    _modelsAction->setCheckable(true);
+    _modelsAction->setChecked(false);
+    _modelsAction->setEnabled(true);
+    _modelsAction->setIcon(modelsIcon);
+    _modelsAction->setText("Models repository");
+    _modelsAction->setToolTip("Display available models");
+    // endregion
 
-//     if (pixmap.load(":/resources/template.jpg")) {
-//         setImage(pixmap);
-//     } else {
-//         qDebug() << "Cannot load template image";
-//     }
-// }
+    // region Create Toolbar
+    _toolBar = std::make_shared<QToolBar>(this);
+    _toolBar->setObjectName(QString::fromUtf8("ToolBar"));
+    _toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    this->addToolBar(Qt::TopToolBarArea, _toolBar.get());
+    this->insertToolBarBreak(_toolBar.get());
+    // endregion
 
-// void MainWindow::onLoadButtonClicked() {
-//     QString filename = QFileDialog::getOpenFileName(
-//         nullptr, "Wybierz plik", "", "Obrazy (*.png *.jpg *.bmp)");
+    // region Create central widget and layout
+    _centralWidget = std::make_shared<QWidget>(this);
+    _centralWidget->setObjectName(QString::fromUtf8("CentralWidget"));
 
-//     if (!filename.isEmpty()) {
-//         QPixmap pixmap;
-//         if (pixmap.load(filename)) {
-//             setImage(pixmap);
-//         }
+    _centralLayout = std::make_shared<QVBoxLayout>(_centralWidget.get());
+    _centralLayout->setObjectName(QString::fromUtf8("CentralLayout"));
+    // endregion
 
-//         imageFilename = filename.toStdString();
-//     } else {
-//         QMessageBox::warning(this, "[Image]", "No image selected. Try
-//         again!");
-//     }
-// }
+    // region Add actions to toolbar
+    _toolBar->addAction(_imageInferenceAction.get());
+    _toolBar->addAction(_cameraInferenceAction.get());
+    _toolBar->addAction(_modelsAction.get());
+    // endregion
 
-// void MainWindow::onRunButtonClicked() {
-//     auto tensor = ModelManager::loadImage(imageFilename);
+    // region Add view to central layout
+    _view = std::make_shared<View>(this);
+    _view->addPage(PageIndex::ImageInference,
+                   std::make_shared<ImagePage>(_view.get(), _state),
+                   _imageInferenceAction);
+    _view->addPage(PageIndex::CameraInference,
+                   std::make_shared<CameraPage>(_view.get(), _state),
+                   _cameraInferenceAction);
+    _view->addPage(PageIndex::Models,
+                   std::make_shared<ModelsPage>(_view.get(), _state),
+                   _modelsAction);
+    _centralLayout->addWidget(_view.get());
+    // endregion
 
-//     if (!tensor.has_value()) {
-//         QMessageBox::warning(this, "[Run]",
-//                              "Incorrect image. Cannot load image in model");
-//         return;
-//     }
-
-//     int out_class = modelManager->predict(tensor.value());
-//     if (out_class == -1) {
-//         QMessageBox::warning(this, "[Run]",
-//                              "Model is not loaded. Restart application");
-//         return;
-//     }
-
-//     std::map<int, std::string> class_to_name{
-//         {0, "T-shirt/top"}, {1, "Trouser"},   {2, "Pullover"}, {3, "Dress"},
-//         {4, "Coat"},        {5, "Sandal"},    {6, "Shirt"},    {7,
-//         "Sneaker"}, {8, "Bag"},         {9, "Ankle boot"}};
-
-//     text->setText(QString::fromStdString(fmt::format(
-//         "Predicted class is: {} [#{}]", class_to_name[out_class],
-//         out_class)));
-//     QMessageBox::information(this, "[Run]", "Successful prediction");
-// }
-
-// void MainWindow::setImage(QPixmap &map) {
-//     image->setPixmap(map);
-//     image->setGeometry(10, 80, map.width(), map.height());
-// }
-
-// void MainWindow::setModelManager(std::shared_ptr<ModelManager> manager) {
-//     modelManager = std::move(manager);
-// }
+    this->setCentralWidget(_centralWidget.get());
+}
