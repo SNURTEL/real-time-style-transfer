@@ -1,5 +1,6 @@
 #include <cassert>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
@@ -7,7 +8,6 @@
 #include <opencv2/videoio.hpp>
 #include <ostream>
 #include <torch/types.h>
-#include <fstream>
 
 #include "common/camera.hpp"
 #include "common/model.hpp"
@@ -32,9 +32,8 @@ int main(int, char *[]) {
 
     std::cout << "Model path is " << modelPath.value() << std::endl;
 
-
-    std::ifstream infile; 
-    infile.open(modelPath.value()); 
+    std::ifstream infile;
+    infile.open(modelPath.value());
 
     // auto _model = Model::fromFile(modelPath.value());
     auto _model = Model::fromStream(infile);

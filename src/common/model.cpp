@@ -1,6 +1,6 @@
+#include <istream>
 #include <optional>
 #include <string>
-#include <istream>
 
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
