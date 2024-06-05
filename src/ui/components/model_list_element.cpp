@@ -10,10 +10,10 @@
 #include "ui/downloader.hpp"
 #include "ui/state.hpp"
 
-ModelListElement::ModelListElement(QWidget *parent,
-                                   modelManager::PretrainedModel model,
-                                   std::shared_ptr<State> state,
-                                   std::function<void()> updateStateAndUiCallback)
+ModelListElement::ModelListElement(
+    QWidget *parent, modelManager::PretrainedModel model,
+    std::shared_ptr<State> state,
+    std::function<void()> updateStateAndUiCallback)
     : QWidget(parent) {
     _model = model;
     _state = std::move(state);

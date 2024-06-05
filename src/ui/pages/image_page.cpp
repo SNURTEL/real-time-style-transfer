@@ -108,8 +108,13 @@ void ImagePage::onLoadImageButtonClicked() {
     if (!filename.isEmpty()) {
         QPixmap pixmap;
         if (pixmap.load(filename)) {
-            float downscaleFactor = pixmap.height() > 800 || pixmap.width() > 800 ? std::max(pixmap.height() / 800, pixmap.width() / 800) : 1;
-            _inputImage->setPixmap(pixmap.scaled(pixmap.width() / downscaleFactor, pixmap.height() / downscaleFactor, Qt::KeepAspectRatio));
+            float downscaleFactor =
+                pixmap.height() > 800 || pixmap.width() > 800
+                    ? std::max(pixmap.height() / 800, pixmap.width() / 800)
+                    : 1;
+            _inputImage->setPixmap(pixmap.scaled(
+                pixmap.width() / downscaleFactor,
+                pixmap.height() / downscaleFactor, Qt::KeepAspectRatio));
             _inputImagePath = filename.toStdString();
             updateUi();
         }
@@ -127,17 +132,21 @@ void ImagePage::onTransformButtonClicked() {
         _inputImagePath = std::nullopt;
         updateUi();
     }
-    
-    cv::Mat _mat = __mat.value()(cv::Rect(0, 0, __mat.value().size[1] / 2 * 2, __mat.value().size[0] / 2 * 2));
-    
-    float downscaleFactor = _mat.size[0] > 800 || _mat.size[1] > 800 ? std::max(_mat.size[0] / 800, _mat.size[1] / 800) : 1;
+
+    cv::Mat _mat = __mat.value()(cv::Rect(0, 0, __mat.value().size[1] / 2 * 2,
+                                          __mat.value().size[0] / 2 * 2));
+
+    float downscaleFactor =
+        _mat.size[0] > 800 || _mat.size[1] > 800
+            ? std::max(_mat.size[0] / 800, _mat.size[1] / 800)
+            : 1;
     cv::Mat mat;
-    cv::resize(_mat, mat, cv::Size(_mat.size[1] / downscaleFactor, _mat.size[0] / downscaleFactor), 0, 0,
-            cv::INTER_LINEAR);
-    
+    cv::resize(_mat, mat,
+               cv::Size(_mat.size[1] / downscaleFactor,
+                        _mat.size[0] / downscaleFactor),
+               0, 0, cv::INTER_LINEAR);
 
     std::shared_ptr<Model> model = _state->getModel();
-
 
     cv::Mat out = transfer(mat, model);
 
@@ -148,10 +157,9 @@ void ImagePage::onTransformButtonClicked() {
     if (!_currImage) {
         return;
     }
-    QImage img(_currImage.value().data, _currImage.value().cols, _currImage.value().rows, QImage::Format_RGB32);
+    QImage img(_currImage.value().data, _currImage.value().cols,
+               _currImage.value().rows, QImage::Format_RGB32);
     QPixmap pixmap = QPixmap::fromImage(img);
     // Display
     _outputImage->setPixmap(pixmap);
-
-    // cv::imshow("Transferred", cropped.clone());
 }

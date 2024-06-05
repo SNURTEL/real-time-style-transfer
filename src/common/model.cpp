@@ -32,7 +32,6 @@ std::optional<Model> Model::fromFile(const std::string &path) {
         std::cerr << e.what() << "\n";
         return std::nullopt;
     }
-
 }
 
 std::optional<Model> Model::fromStream(std::istream &stream) {

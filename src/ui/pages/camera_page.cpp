@@ -26,9 +26,7 @@ CameraPage::CameraPage(QWidget *parent, std::shared_ptr<State> state)
     updateUi();
 }
 
-CameraPage::~CameraPage() {
-    setRunning(false);
-}
+CameraPage::~CameraPage() { setRunning(false); }
 
 void CameraPage::setupUi() {
     _layout = std::make_shared<QVBoxLayout>(this);
@@ -81,13 +79,11 @@ void CameraPage::updateUi() {
             _title->setText("Camera Inference");
             _title->setStyleSheet("QLabel { color : #78e08f; }");
             _button->setDisabled(false);
-        }
-        else {
+        } else {
             _title->setText("Missing active model");
             _title->setStyleSheet("QLabel { color : #e55039; }");
         }
-    }
-    else {
+    } else {
         _title->setText("No camera available");
         _title->setStyleSheet("QLabel { color : #e55039; }");
     }
@@ -99,7 +95,7 @@ void CameraPage::activatePage() {
     updateUi();
 }
 
-void CameraPage::deactivatePage() { 
+void CameraPage::deactivatePage() {
     Page::deactivatePage();
     setRunning(false);
 }
@@ -124,7 +120,7 @@ void CameraPage::setRunning(bool flag) {
         if (_updaterThread && _updaterThread->joinable()) {
             _updaterThread->join();
             _updaterThread = std::nullopt;
-        } 
+        }
         _button->setText(QString::fromUtf8("Start"));
     }
 }
@@ -142,16 +138,20 @@ void CameraPage::updater() {
             std::cerr << "Error getting frame" << std::endl;
             return;
         }
-        cv::Mat _frame = __frame.value()(cv::Rect(0, 0, __frame.value().size[1] / 2 * 2, __frame.value().size[0] / 2 * 2));
+        cv::Mat _frame =
+            __frame.value()(cv::Rect(0, 0, __frame.value().size[1] / 2 * 2,
+                                     __frame.value().size[0] / 2 * 2));
         cv::Mat frame;
-        cv::resize(_frame, frame, cv::Size(_frame.size[1] / 2, _frame.size[0] / 2), 0, 0,
-                    cv::INTER_LINEAR);
+        cv::resize(_frame, frame,
+                   cv::Size(_frame.size[1] / 2, _frame.size[0] / 2), 0, 0,
+                   cv::INTER_LINEAR);
 
         cv::Mat imageBGRAL;
         cv::cvtColor(frame, imageBGRAL, cv::COLOR_BGR2BGRA);
 
         _imageLeft = imageBGRAL.clone();
-        QImage imgL(_imageLeft.value().data, _imageLeft.value().cols, _imageLeft.value().rows, QImage::Format_RGB32);
+        QImage imgL(_imageLeft.value().data, _imageLeft.value().cols,
+                    _imageLeft.value().rows, QImage::Format_RGB32);
         QPixmap pixmapL = QPixmap::fromImage(imgL);
         _cameraLeft->setPixmap(pixmapL);
 
@@ -161,7 +161,8 @@ void CameraPage::updater() {
         cv::cvtColor(out, imageBGRAR, cv::COLOR_BGR2BGRA);
 
         _imageRight = imageBGRAR.clone();
-        QImage imgR(_imageRight.value().data, _imageRight.value().cols, _imageRight.value().rows, QImage::Format_RGB32);
+        QImage imgR(_imageRight.value().data, _imageRight.value().cols,
+                    _imageRight.value().rows, QImage::Format_RGB32);
         QPixmap pixmapR = QPixmap::fromImage(imgR);
         _cameraRight->setPixmap(pixmapR);
     }

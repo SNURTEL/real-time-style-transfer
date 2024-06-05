@@ -4,7 +4,7 @@
 #include <iostream>
 #include <torch/torch.h>
 #include <torch/types.h>
-#undef CHECK  /* Torch provides a CHECK macro, which conflicts with Catch2 */
+#undef CHECK /* Torch provides a CHECK macro, which conflicts with Catch2 */
 #include <catch2/catch_test_macros.hpp>
 #include <opencv2/core/mat.hpp>
 
