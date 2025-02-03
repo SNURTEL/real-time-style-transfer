@@ -1,6 +1,6 @@
-# 24L-ZPR
+# Real time style transfer
 
-A C++ app for live style transfer.
+A C++ app for live style transfe using CycleGAN models.
 
 
 ![live](doc/images/live.gif)
